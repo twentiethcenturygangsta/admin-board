@@ -1,1 +1,6 @@
 rootProject.name = 'admin-board'
+include 'admin-board-core'
+include 'admin-board-view'
+include 'admin-board-api'
+include 'admin-board-commons'
+

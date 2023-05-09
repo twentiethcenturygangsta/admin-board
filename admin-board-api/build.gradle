@@ -1,0 +1,7 @@
+dependencies {
+    implementation project(':admin-board-core')
+    implementation project(':admin-board-commons')
+}
+
+bootJar.enabled = false
+jar.enabled = true

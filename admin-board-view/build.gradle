@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(':admin-board-api')
+}
+bootJar.enabled = false
+jar.enabled = true
