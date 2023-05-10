@@ -1,26 +1,19 @@
 package com.github.twentiethcenturygangsta.adminboard.annotation.registrar;
 
 import com.github.twentiethcenturygangsta.adminboard.annotation.EnableAdminBoard;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.boot.autoconfigure.AutoConfigurationImportSelector;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.ApplicationContext;
+
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
-import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
-import java.util.*;
-
 @Slf4j
 public class AdminBoardRegistrar implements ImportBeanDefinitionRegistrar {
 
     private String[] basePackages;
-
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
