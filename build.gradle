@@ -1,43 +1,41 @@
 plugins {
 	id 'java'
 	id 'java-library'
+	id 'maven-publish'
 	id 'org.springframework.boot' version '3.0.6'
 	id 'io.spring.dependency-management' version '1.1.0'
 }
 
-bootJar.enabled = false
+group = 'com.github.twentiethcenturygangsta'
+version = '1.0.0'
 
-subprojects {
-	group = 'com.twentiethcenturygangsta'
-	version = '0.0.1-SNAPSHOT'
-	sourceCompatibility = '11'
+java {
+	withSourcesJar()
+	withJavadocJar()
+}
 
-	apply plugin: 'java'
-	apply plugin: 'java-library'
-	apply plugin: 'org.springframework.boot'
-	apply plugin: 'io.spring.dependency-management'
+jar {
+	from sourceSets.main.output
+	exclude 'BOOT-INF/**'
+	archiveClassifier.set('')
+}
 
-	configurations {
-		compileOnly {
-			extendsFrom annotationProcessor
+wrapper {
+	gradleVersion = "7.5.1"
+	distributionType = Wrapper.DistributionType.ALL
+}
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			from components.java
 		}
 	}
+}
 
-	repositories {
-		mavenCentral()
-	}
-
-	dependencies {
-		implementation 'org.springframework.boot:spring-boot-starter'
-		implementation 'org.springframework.boot:spring-boot-starter-web'
-		testImplementation 'org.springframework.boot:spring-boot-starter-test'
-		compileOnly 'org.projectlombok:lombok'
-		annotationProcessor 'org.projectlombok:lombok'
-		testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	}
-
-	tasks.named('test') {
-		useJUnitPlatform()
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
 	}
 }
 
@@ -45,3 +43,20 @@ repositories {
 	mavenCentral()
 }
 
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.projectlombok:lombok'
+
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+tasks.withType(Javadoc) {
+	options.addStringOption('Xdoclint:none', '-quiet')
+	options.encoding = "UTF-8"
+}
