@@ -1,12 +1,48 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.0.6'
+	id 'java-library'
+	id 'maven-publish'
+	id 'org.springframework.boot' version '3.0.2'
 	id 'io.spring.dependency-management' version '1.1.0'
 }
 
-group = 'com.twentiethcenturygangsta'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+group = 'com.github.twentiethcenturygangsta'
+version = '1.0.0'
+bootJar.enabled = false
+jar.enabled = true
+
+java {
+	withSourcesJar()
+	withJavadocJar()
+}
+
+jar {
+	from sourceSets.main.output
+	exclude 'BOOT-INF/**'
+	archiveClassifier.set('')
+}
+
+wrapper {
+	gradleVersion = "7.5.1"
+	distributionType = Wrapper.DistributionType.ALL
+}
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			from components.java
+
+			versionMapping {
+				usage('java-api') {
+					fromResolutionOf('runtimeClasspath')
+				}
+				usage('java-runtime') {
+					fromResolutionResult()
+				}
+			}
+		}
+	}
+}
 
 configurations {
 	compileOnly {
@@ -19,12 +55,19 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
+	implementation 'org.projectlombok:lombok'
+
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.withType(Javadoc) {
+	options.addStringOption('Xdoclint:none', '-quiet')
+	options.encoding = "UTF-8"
 }
