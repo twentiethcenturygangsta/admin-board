@@ -10,10 +10,14 @@ import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Slf4j
 public class AdminBoardRegistrar implements ImportBeanDefinitionRegistrar {
 
-    private String[] basePackages;
+    private static final String ADMIN_BOARD_PACKAGE_NAME = "com.github.twentiethcenturygangsta.adminboard";
+    private List<String> basePackages;
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
@@ -21,13 +25,15 @@ public class AdminBoardRegistrar implements ImportBeanDefinitionRegistrar {
         String[] basePackages = attributes.getStringArray("basePackages");
 
         if (basePackages.length == 0) {
-            this.basePackages = new String[]{ClassUtils.getPackageName(importingClassMetadata.getClassName())};
+            this.basePackages.add(ClassUtils.getPackageName(importingClassMetadata.getClassName()));
         } else {
-            this.basePackages = basePackages;
+            this.basePackages = Arrays.asList(basePackages);
         }
+        this.basePackages.add(ADMIN_BOARD_PACKAGE_NAME);
+
     }
 
-    public String[] getBasePackages() {
+    public List<String> getBasePackages() {
         return basePackages;
     }
 
