@@ -36,8 +36,10 @@ public class AdminBoardRepositoryBuilder {
             repositories.addAll(new Reflections(basePackage).getTypesAnnotatedWith(Repository.class));
         }
         for (Class<?> object : repositories) {
-            RepositoryInfo repositoryInfo = getRepository(object);
-            this.repositories.put(object.getSimpleName(), repositoryInfo);
+            DefaultRepositoryMetadata metadata = new DefaultRepositoryMetadata(object);
+
+            RepositoryInfo repositoryInfo = setRepository(metadata);
+            this.repositories.put(metadata.getDomainType().getSimpleName(), repositoryInfo);
         }
     }
 
@@ -45,9 +47,8 @@ public class AdminBoardRepositoryBuilder {
         return repositories;
     }
 
-    private RepositoryInfo getRepository(Class<?> object) {
+    private RepositoryInfo setRepository(DefaultRepositoryMetadata metadata) {
         Repositories repositoriesInApplicationContext = new Repositories(applicationContext);
-        DefaultRepositoryMetadata metadata = new DefaultRepositoryMetadata(object);
         Object repository = repositoriesInApplicationContext.getRepositoryFor(metadata.getDomainType()).orElseThrow(() -> new RuntimeException("Not exist Repository"));
 
         List<Class<?>> repositoryInterfaces = Arrays.asList(metadata.getRepositoryInterface().getInterfaces());
