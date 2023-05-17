@@ -6,7 +6,7 @@ import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.ListPagingAndSortingRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-public class RepositoryClient {
+public class RepositoryBuilder {
 
     public static JpaRepository<?, ?> getJpaRepositoryInstance(Object object) {
         return (JpaRepository<?, ?>) object;

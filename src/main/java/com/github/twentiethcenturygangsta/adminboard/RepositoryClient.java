@@ -15,11 +15,11 @@ import java.util.*;
 
 @Slf4j
 @Component
-public class AdminBoardRepositoryBuilder {
+public class RepositoryClient {
     private final ApplicationContext applicationContext;
     private final Map<String, RepositoryInfo> repositories = new HashMap<>();
 
-    public AdminBoardRepositoryBuilder(final ApplicationContext applicationContext) {
+    public RepositoryClient(final ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
