@@ -1,7 +1,6 @@
-package com.github.twentiethcenturygangsta.adminboard;
+package com.github.twentiethcenturygangsta.adminboard.repository;
 
 import com.github.twentiethcenturygangsta.adminboard.annotation.registrar.AdminBoardRegistrar;
-import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.springframework.context.ApplicationContext;
@@ -45,6 +44,10 @@ public class RepositoryClient {
 
     public Map<String, RepositoryInfo> getRepositories() {
         return repositories;
+    }
+
+    public RepositoryInfo getRepository(String domainName) {
+        return repositories.get(domainName);
     }
 
     private RepositoryInfo setRepository(DefaultRepositoryMetadata metadata) {
