@@ -16,19 +16,21 @@ import java.util.stream.Collectors;
 public class EntityInfo {
     private final static String WHITE_SPACE = " ";
     private final String name;
+    private final String displayName;
     private final String group;
     private final String description;
     private final List<ColumnInfo> columns;
 
     @Builder
     public EntityInfo(Class<?> object) {
-        this.name = getObjectName(object);
+        this.name = object.getSimpleName();
+        this.displayName = getObjectDisplayName(object);
         this.group = getObjectGroup(object);
         this.description = getObjectDescription(object);
         this.columns = getObjectColumns(object);
     }
 
-    private String getObjectName(Class<?> object) {
+    private String getObjectDisplayName(Class<?> object) {
         return AdminBoardStringConvertUtil.getFormattedTableName(object.getSimpleName());
     }
 

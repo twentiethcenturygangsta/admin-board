@@ -17,6 +17,7 @@ public class ColumnInfo {
     private static final int DEFAULT_MAX_SIZE = 255;
     private static final String WHITE_SPACE = " ";
     private final String name;
+    private final String displayName;
     private final String type;
     private final DatabaseRelationType relationType;
     private final int maxSize;
@@ -28,7 +29,8 @@ public class ColumnInfo {
 
     @Builder
     public ColumnInfo(Field field) {
-        this.name = getFieldName(field);
+        this.name = field.getName();
+        this.displayName = getFieldDisplayName(field);
         this.type = field.getType().getName();
         this.relationType = getFieldRelationType(field);
         this.maxSize = getFieldMaxSize(field);
@@ -39,7 +41,7 @@ public class ColumnInfo {
         this.isAllowedBlank = field.isAnnotationPresent(NotBlank.class);
     }
 
-    private String getFieldName(Field field) {
+    private String getFieldDisplayName(Field field) {
         return AdminBoardStringConvertUtil.getFormattedColumnName(field.getName());
     }
 
