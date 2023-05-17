@@ -2,6 +2,7 @@ package com.github.twentiethcenturygangsta.adminboard.entity;
 
 import com.github.twentiethcenturygangsta.adminboard.annotation.AdminBoardColumn;
 import com.github.twentiethcenturygangsta.adminboard.enums.DatabaseRelationType;
+import com.github.twentiethcenturygangsta.adminboard.utils.AdminBoardStringConvertUtil;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -39,15 +40,7 @@ public class ColumnInfo {
     }
 
     private String getFieldName(Field field) {
-        String fieldName = field.getName();
-        StringBuilder convertedFieldName = new StringBuilder();
-        for(int i = 0; i<fieldName.length(); i++) {
-            if (Character.isUpperCase(fieldName.charAt(i))) {
-                convertedFieldName.append(WHITE_SPACE);
-                convertedFieldName.append(i);
-            }
-        }
-        return convertedFieldName.toString();
+        return AdminBoardStringConvertUtil.getFormattedColumnName(field.getName());
     }
 
     private DatabaseRelationType getFieldRelationType(Field field) {

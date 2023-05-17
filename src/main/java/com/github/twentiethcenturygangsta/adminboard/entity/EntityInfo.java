@@ -1,6 +1,7 @@
 package com.github.twentiethcenturygangsta.adminboard.entity;
 
 import com.github.twentiethcenturygangsta.adminboard.annotation.AdminBoardEntity;
+import com.github.twentiethcenturygangsta.adminboard.utils.AdminBoardStringConvertUtil;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -28,21 +29,7 @@ public class EntityInfo {
     }
 
     private String getObjectName(Class<?> object) {
-        String entityName = object.getSimpleName();
-        StringBuilder convertedEntityName = new StringBuilder();
-        for(int i = 0; i<entityName.length(); i++) {
-            if(i == 0) {
-                convertedEntityName.append(Character.toUpperCase(entityName.charAt(0)));
-            } else {
-                if(Character.isUpperCase(entityName.charAt(i))) {
-                    convertedEntityName.append(WHITE_SPACE);
-                    convertedEntityName.append(entityName.charAt(i));
-                } else {
-                    convertedEntityName.append(Character.toUpperCase(entityName.charAt(i)));
-                }
-            }
-        }
-        return convertedEntityName.toString();
+        return AdminBoardStringConvertUtil.getFormattedTableName(object.getSimpleName());
     }
 
     private String getObjectGroup(Class<?> object) {
