@@ -39,7 +39,7 @@ public class AdminBoardRepositoryBuilder {
             DefaultRepositoryMetadata metadata = new DefaultRepositoryMetadata(object);
 
             RepositoryInfo repositoryInfo = setRepository(metadata);
-            this.repositories.put(metadata.getDomainType().getSimpleName(), repositoryInfo);
+            this.repositories.put(repositoryInfo.getDomainName(), repositoryInfo);
         }
     }
 
