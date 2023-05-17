@@ -39,21 +39,4 @@ public class RepositoryInfo {
         }
         return PagingAndSortingRepository.class;
     }
-
-    public Repository<?, ?> getRepository() {
-        if (repositoryType == JpaRepository.class) {
-            return (JpaRepository<?, ?>) repositoryObject;
-        }
-        if (repositoryType == CrudRepository.class) {
-            return (CrudRepository<?, ?>) repositoryObject;
-        }
-        if (repositoryType == ListCrudRepository.class) {
-            return (ListCrudRepository<?, ?>) repositoryObject;
-        }
-        if (repositoryType == ListPagingAndSortingRepository.class) {
-            return (ListPagingAndSortingRepository<?, ?>) repositoryObject;
-        }
-        return (PagingAndSortingRepository<?, ?>) repositoryObject;
-//        return (JpaRepository<?, ?>) repositoryObject;
-    }
 }
