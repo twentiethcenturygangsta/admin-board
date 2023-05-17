@@ -14,6 +14,7 @@ import java.lang.reflect.Field;
 @Getter
 public class ColumnInfo {
     private static final int DEFAULT_MAX_SIZE = 255;
+    private static final String WHITE_SPACE = " ";
     private final String name;
     private final String type;
     private final DatabaseRelationType relationType;
@@ -26,7 +27,7 @@ public class ColumnInfo {
 
     @Builder
     public ColumnInfo(Field field) {
-        this.name = field.getName().toUpperCase();
+        this.name = getFieldName(field);
         this.type = field.getType().getName();
         this.relationType = getFieldRelationType(field);
         this.maxSize = getFieldMaxSize(field);
@@ -35,6 +36,18 @@ public class ColumnInfo {
         this.isExposed = getFieldIsExposed(field);
         this.isAllowedNull = field.isAnnotationPresent(NotNull.class);
         this.isAllowedBlank = field.isAnnotationPresent(NotBlank.class);
+    }
+
+    private String getFieldName(Field field) {
+        String fieldName = field.getName();
+        StringBuilder convertedFieldName = new StringBuilder();
+        for(int i = 0; i<fieldName.length(); i++) {
+            if (Character.isUpperCase(fieldName.charAt(i))) {
+                convertedFieldName.append(WHITE_SPACE);
+                convertedFieldName.append(i);
+            }
+        }
+        return convertedFieldName.toString();
     }
 
     private DatabaseRelationType getFieldRelationType(Field field) {

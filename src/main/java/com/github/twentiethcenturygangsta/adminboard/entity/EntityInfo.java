@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Getter
 public class EntityInfo {
+    private final static String WHITE_SPACE = " ";
     private final String name;
     private final String group;
     private final String description;
@@ -27,7 +28,21 @@ public class EntityInfo {
     }
 
     private String getObjectName(Class<?> object) {
-        return object.getSimpleName();
+        String entityName = object.getSimpleName();
+        StringBuilder convertedEntityName = new StringBuilder();
+        for(int i = 0; i<entityName.length(); i++) {
+            if(i == 0) {
+                convertedEntityName.append(Character.toUpperCase(entityName.charAt(0)));
+            } else {
+                if(Character.isUpperCase(entityName.charAt(i))) {
+                    convertedEntityName.append(WHITE_SPACE);
+                    convertedEntityName.append(entityName.charAt(i));
+                } else {
+                    convertedEntityName.append(Character.toUpperCase(entityName.charAt(i)));
+                }
+            }
+        }
+        return convertedEntityName.toString();
     }
 
     private String getObjectGroup(Class<?> object) {
