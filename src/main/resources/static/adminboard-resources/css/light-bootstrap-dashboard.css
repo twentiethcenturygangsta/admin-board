@@ -517,7 +517,7 @@ body>.navbar-collapse .nav .nav-link {
     font-weight: 600;
 }
 
-.sidebar .logo,
+.sidebar .logo .group,
 body>.navbar-collapse .logo {
     padding: 10px 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
