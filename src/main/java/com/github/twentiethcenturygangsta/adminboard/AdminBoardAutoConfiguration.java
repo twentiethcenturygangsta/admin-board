@@ -39,4 +39,9 @@ public class AdminBoardAutoConfiguration {
     public AdminBoardViewController adminBoardviewController(AdminBoardFactory adminBoardFactory) {
         return new AdminBoardViewController(adminBoardFactory);
     }
+
+    @Bean
+    public MvcConfiguration mvcConfiguration() {
+        return new MvcConfiguration();
+    }
 }
