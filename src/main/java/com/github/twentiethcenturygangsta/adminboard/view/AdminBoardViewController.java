@@ -35,8 +35,16 @@ public class AdminBoardViewController {
         return "user";
     }
 
+    @GetMapping("/admin-user")
+    public String AdminUserView(Model model) {
+        getSideBarModel(model);
+        model.addAttribute("data", adminBoardFactory.getEntities());
+        return "adminUser";
+    }
+
     @GetMapping("/table")
     public String TableView(Model model) {
+        getSideBarModel(model);
         model.addAttribute("data", adminBoardFactory.getEntities());
         return "table";
     }
