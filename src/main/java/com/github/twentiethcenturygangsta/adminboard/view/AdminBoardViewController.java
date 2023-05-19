@@ -19,6 +19,7 @@ public class AdminBoardViewController {
 
     @GetMapping("/home")
     public String HomeView(Model model) {
+        model.addAttribute("adminBoardInformation", adminBoardFactory.getAdminBoardInfo());
         model.addAttribute("data", adminBoardFactory.getEntitiesByGroup());
         model.addAttribute("entities", adminBoardFactory.getEntities());
         log.info("entities = {}", adminBoardFactory.getEntities());

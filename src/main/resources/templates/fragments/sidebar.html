@@ -7,9 +7,9 @@
 -->
         <div class="sidebar-wrapper">
             <div class="logo">
-                <a href="https://github.com/orgs/twentiethcenturygangsta/repositories" class="simple-text">
-                    ADMIN BOARD
+                <a href="https://github.com/orgs/twentiethcenturygangsta/repositories" class="simple-text" th:text="${adminBoardInformation.get('title')}">
                 </a>
+                <div style="text-align: center; font-size: 10px; font-weight: 400" th:text="${adminBoardInformation.get('description')}"></div>
             </div>
             <ul class="nav">
                 <li>
