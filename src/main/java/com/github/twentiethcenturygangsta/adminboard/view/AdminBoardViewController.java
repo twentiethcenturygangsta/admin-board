@@ -30,6 +30,7 @@ public class AdminBoardViewController {
 
     @GetMapping("/user")
     public String ProfileView(Model model) {
+        getSideBarModel(model);
         model.addAttribute("data", adminBoardFactory.getEntities());
         return "user";
     }
@@ -74,5 +75,15 @@ public class AdminBoardViewController {
     @GetMapping("/login")
     public String LoginView(Model model) {
         return "login";
+    }
+
+    @GetMapping("/tasks")
+    public String TaskView(Model model) {
+        getSideBarModel(model);
+        return "tasks";
+    }
+
+    private void getSideBarModel(Model model) {
+        model.addAttribute("adminBoardInformation", adminBoardFactory.getAdminBoardInfo());
     }
 }
