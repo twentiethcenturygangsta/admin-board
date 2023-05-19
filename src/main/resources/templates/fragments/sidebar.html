@@ -25,45 +25,55 @@
                     </a>
                 </li>
 
-                <div class="logo" style="padding-left:30px">
-                    Group
-                </div>
-                <li>
-                    <a class="nav-link" th:href="@{/admin-board/user}">
-                        <i class="nc-icon nc-circle-09"></i>
-                        <p>User</p>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link" th:href="@{/admin-board/table}">
-                        <i class="nc-icon nc-notes"></i>
-                        <p>Table List</p>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link" th:href="@{/admin-board/typography}">
-                        <i class="nc-icon nc-paper-2"></i>
-                        <p>Typography</p>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link" th:href="@{/admin-board/icons}">
-                        <i class="nc-icon nc-atom"></i>
-                        <p>Icons</p>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link" th:href="@{/admin-board/maps}">
-                        <i class="nc-icon nc-pin-3"></i>
-                        <p>Maps</p>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link" th:href="@{/admin-board/notifications}">
-                        <i class="nc-icon nc-bell-55"></i>
-                        <p>Notifications</p>
-                    </a>
-                </li>
+                <th:block th:each="group, index : ${entitiesByGroup}">
+                    <div class="logo" style="padding-left:30px">
+                        <span th:text="${group.key}"></span>
+                    </div>
+                    <th:block th:each="entity, index : ${group.value}">
+                        <li>
+                            <a class="nav-link" th:href="@{/admin-board/{entityName}(entityName=${entity.getName()})}">
+                                <i class="nc-icon nc-circle-09"></i>
+                                <p th:text="${entity.getDisplayName()}"></p>
+                            </a>
+                        </li>
+                    </th:block>
+                    </th:block>
+<!--                <li>-->
+<!--                    <a class="nav-link" th:href="@{/admin-board/user}">-->
+<!--                        <i class="nc-icon nc-circle-09"></i>-->
+<!--                        <p>User</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <a class="nav-link" th:href="@{/admin-board/table}">-->
+<!--                        <i class="nc-icon nc-notes"></i>-->
+<!--                        <p>Table List</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <a class="nav-link" th:href="@{/admin-board/typography}">-->
+<!--                        <i class="nc-icon nc-paper-2"></i>-->
+<!--                        <p>Typography</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <a class="nav-link" th:href="@{/admin-board/icons}">-->
+<!--                        <i class="nc-icon nc-atom"></i>-->
+<!--                        <p>Icons</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <a class="nav-link" th:href="@{/admin-board/maps}">-->
+<!--                        <i class="nc-icon nc-pin-3"></i>-->
+<!--                        <p>Maps</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <a class="nav-link" th:href="@{/admin-board/notifications}">-->
+<!--                        <i class="nc-icon nc-bell-55"></i>-->
+<!--                        <p>Notifications</p>-->
+<!--                    </a>-->
+<!--                </li>-->
 <!--                <li class="nav-item nav-link active-pro">-->
 <!--                    <a class="nav-link active" th:href="@{/admin-board/upgrade}">-->
 <!--                        <i class="nc-icon nc-alien-33"></i>-->
