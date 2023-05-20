@@ -26,7 +26,7 @@ public class RepositoryInfo {
     }
 
     private String getRepositoryDomainName(DefaultRepositoryMetadata metadata) {
-        return AdminBoardStringConvertUtil.getFormattedTableName(metadata.getDomainType().getSimpleName());
+        return metadata.getDomainType().getSimpleName();
     }
 
     private Class<?> getRepositoryType(List<Class<?>> repositoryInterfaces) {

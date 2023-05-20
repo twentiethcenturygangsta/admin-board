@@ -2,9 +2,12 @@ package com.github.twentiethcenturygangsta.adminboard.view;
 
 import com.github.twentiethcenturygangsta.adminboard.AdminBoardFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
@@ -19,9 +22,7 @@ public class AdminBoardViewController {
 
     @GetMapping("/home")
     public String HomeView(Model model) {
-        model.addAttribute("adminBoardInformation", adminBoardFactory.getAdminBoardInfo());
-        model.addAttribute("data", adminBoardFactory.getEntitiesByGroup());
-        model.addAttribute("entities", adminBoardFactory.getEntities());
+
         log.info("entities = {}", adminBoardFactory.getEntities());
         log.info("data = {}", adminBoardFactory.getEntitiesByGroup());
 
@@ -39,7 +40,18 @@ public class AdminBoardViewController {
     public String AdminUserView(Model model) {
         getSideBarModel(model);
         model.addAttribute("data", adminBoardFactory.getEntities());
+        model.addAttribute("entityName", "AdminUser");
         return "adminUser";
+    }
+
+    @GetMapping("/{entityName}")
+    public String EntityView(Model model, @PathVariable("entityName") String entityName, @PageableDefault Pageable pageable) {
+        getSideBarModel(model);
+        model.addAttribute("data", adminBoardFactory.getObjects(entityName, pageable));
+        model.addAttribute("entity", adminBoardFactory.getEntity(entityName));
+        model.addAttribute("entityName", entityName);
+
+        return "entity";
     }
 
     @GetMapping("/table")
@@ -88,10 +100,13 @@ public class AdminBoardViewController {
     @GetMapping("/tasks")
     public String TaskView(Model model) {
         getSideBarModel(model);
+        model.addAttribute("entityName", "tasks");
         return "tasks";
     }
 
     private void getSideBarModel(Model model) {
         model.addAttribute("adminBoardInformation", adminBoardFactory.getAdminBoardInfo());
+        model.addAttribute("entitiesByGroup", adminBoardFactory.getEntitiesByGroup());
+        model.addAttribute("entities", adminBoardFactory.getEntities());
     }
 }

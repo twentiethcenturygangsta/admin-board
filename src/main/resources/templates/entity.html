@@ -24,7 +24,7 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg " color-on-scroll="500">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#pablo"> Admin Users</a>
+                <a class="navbar-brand" href="#pablo" th:text="${groupName}"></a>
                 <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-bar burger-lines"></span>
                     <span class="navbar-toggler-bar burger-lines"></span>
@@ -94,61 +94,88 @@
                     <div class="col-md-12">
                         <div class="card strpied-tabled-with-hover">
                             <div class="card-header ">
-                                <h4 class="card-title">Admin User Table</h4>
-                                <p class="card-category">AdminBoard를 이용할 수 있는 Admin 계정 데이터 테이블입니다.</p>
+                                <h4 class="card-title"><span th:text="${entityName}"></span> Table </h4>
+                                <p class="card-category"><span th:text="${entity.getDescription()}"></span></p>
                             </div>
                             <div class="card-body table-full-width table-responsive">
                                 <table class="table table-hover table-striped">
                                     <thead>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Salary</th>
-                                    <th>Country</th>
-                                    <th>City</th>
+                                    <th:block th:each="field, i : ${entity.getColumns()}">
+                                        <th:block th:if="${i.count le 6}">
+                                            <th>
+                                                <span th:text="${field.getName()}"></span>
+                                            </th>
+                                        </th:block>
+<!--                                    <th>ID</th>-->
+<!--                                    <th>Name</th>-->
+<!--                                    <th>Salary</th>-->
+<!--                                    <th>Country</th>-->
+<!--                                    <th>City</th>-->
+                                    </th:block>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Dakota Rice</td>
-                                        <td>$36,738</td>
-                                        <td>Niger</td>
-                                        <td>Oud-Turnhout</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Minerva Hooper</td>
-                                        <td>$23,789</td>
-                                        <td>Curaçao</td>
-                                        <td>Sinaai-Waas</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Sage Rodriguez</td>
-                                        <td>$56,142</td>
-                                        <td>Netherlands</td>
-                                        <td>Baileux</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Philip Chaney</td>
-                                        <td>$38,735</td>
-                                        <td>Korea, South</td>
-                                        <td>Overland Park</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Doris Greene</td>
-                                        <td>$63,542</td>
-                                        <td>Malawi</td>
-                                        <td>Feldkirchen in Kärnten</td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>Mason Porter</td>
-                                        <td>$78,615</td>
-                                        <td>Chile</td>
-                                        <td>Gloucester</td>
-                                    </tr>
+                                    <th:block th:each="object, i : ${data}">
+
+                                        <tr>
+                                            <th:block th:each="field, i : ${entity.getColumns}">
+                                                <th:block th:if="${i.count le 6}">
+                                                    <th:block th:if="${field.getRelationType().name() != 'NON_RELATIONSHIP'}">
+                                                        <td>
+                                                            <span th:text="${field.getRelationType()}"></span>
+                                                        </td>
+                                                    </th:block>
+
+                                                    <th:block th:if="${field.getRelationType().name() == 'NON_RELATIONSHIP'}">
+                                                        <td>
+                                                            <span style="display:block; text-overflow: ellipsis; overflow:hidden; width:100px; white-space: nowrap; word-break: break-all"
+                                                                    th:text="${@adminBoardFactory.getFieldMappingValue(object, field.getName())}"></span>
+                                                        </td>
+                                                    </th:block>
+
+<!--                                            <td>1</td>-->
+<!--                                            <td>Dakota Rice</td>-->
+<!--                                            <td>$36,738</td>-->
+<!--                                            <td>Niger</td>-->
+<!--                                            <td>Oud-Turnhout</td>-->
+                                                </th:block>
+                                            </th:block>
+                                        </tr>
+                                    </th:block>
+<!--                                    <tr>-->
+<!--                                        <td>2</td>-->
+<!--                                        <td>Minerva Hooper</td>-->
+<!--                                        <td>$23,789</td>-->
+<!--                                        <td>Curaçao</td>-->
+<!--                                        <td>Sinaai-Waas</td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <td>3</td>-->
+<!--                                        <td>Sage Rodriguez</td>-->
+<!--                                        <td>$56,142</td>-->
+<!--                                        <td>Netherlands</td>-->
+<!--                                        <td>Baileux</td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <td>4</td>-->
+<!--                                        <td>Philip Chaney</td>-->
+<!--                                        <td>$38,735</td>-->
+<!--                                        <td>Korea, South</td>-->
+<!--                                        <td>Overland Park</td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <td>5</td>-->
+<!--                                        <td>Doris Greene</td>-->
+<!--                                        <td>$63,542</td>-->
+<!--                                        <td>Malawi</td>-->
+<!--                                        <td>Feldkirchen in Kärnten</td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <td>6</td>-->
+<!--                                        <td>Mason Porter</td>-->
+<!--                                        <td>$78,615</td>-->
+<!--                                        <td>Chile</td>-->
+<!--                                        <td>Gloucester</td>-->
+<!--                                    </tr>-->
                                     </tbody>
                                 </table>
                             </div>
