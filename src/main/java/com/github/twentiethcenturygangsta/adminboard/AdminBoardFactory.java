@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.ListPagingAndSortingRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
@@ -67,17 +69,52 @@ public class AdminBoardFactory {
     }
 
     public Page<?> getObjects(String entityName, Pageable pageable) {
+        Long id = 1L;
         RepositoryInfo repositoryInfo = repositoryClient.getRepository(entityName);
         if(repositoryInfo.getRepositoryType() == JpaRepository.class) {
-            JpaRepository<?, ?> repository = RepositoryBuilder.getJpaRepositoryInstance(repositoryInfo.getRepositoryObject());
+            JpaRepository<?, ?> repository = RepositoryBuilder.getJpaRepositoryInstance(
+                    repositoryInfo.getRepositoryObject(),
+                    repositoryInfo.getDomain(),
+                    repositoryInfo.getIdType()
+            );
             return repository.findAll(pageable);
         }
         if(repositoryInfo.getRepositoryType() == PagingAndSortingRepository.class) {
-            PagingAndSortingRepository<?, ?> repository = RepositoryBuilder.getPagingAndSortingRepositoryInstance(repositoryInfo.getRepositoryObject());
+            PagingAndSortingRepository<?, ?> repository = RepositoryBuilder.getPagingAndSortingRepositoryInstance(
+                    repositoryInfo.getRepositoryObject(),
+                    repositoryInfo.getDomain(),
+                    repositoryInfo.getIdType()
+            );
             return repository.findAll(pageable);
         }
-        ListPagingAndSortingRepository<?, ?> repository = RepositoryBuilder.getListPagingAndSortingRepositoryInstance(repositoryInfo.getRepositoryObject());
+        ListPagingAndSortingRepository<?, ?> repository = RepositoryBuilder.getListPagingAndSortingRepositoryInstance(
+                repositoryInfo.getRepositoryObject(),
+                repositoryInfo.getDomain(),
+                repositoryInfo.getIdType()
+        );
         return repository.findAll(pageable);
+    }
+
+    public Optional<Object> getObject(String entityName, Long entityObjectId) {
+        RepositoryInfo repositoryInfo = repositoryClient.getRepository(entityName);
+        if(repositoryInfo.getRepositoryType() == JpaRepository.class) {
+            JpaRepository<Object, Object> repository = RepositoryBuilder.getJpaRepositoryInstance(repositoryInfo.getRepositoryObject(), repositoryInfo.getDomain(), repositoryInfo.getIdType());
+            return repository.findById(entityObjectId);
+        }
+        if(repositoryInfo.getRepositoryType() == CrudRepository.class) {
+            CrudRepository<Object, Object> repository = RepositoryBuilder.getCrudRepositoryInstance(
+                    repositoryInfo.getRepositoryObject(),
+                    repositoryInfo.getDomain(),
+                    repositoryInfo.getIdType()
+            );
+            return repository.findById(entityObjectId);
+        }
+        ListCrudRepository<Object, Object> repository = RepositoryBuilder.getListCrudRepositoryInstance(
+                repositoryInfo.getRepositoryObject(),
+                repositoryInfo.getDomain(),
+                repositoryInfo.getIdType()
+        );
+        return repository.findById(entityObjectId);
     }
 
     public Object getFieldMappingValue(Object root, String fieldName ) {

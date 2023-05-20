@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Optional;
+
 @Slf4j
 @Controller
 @RequestMapping("/admin-board")
@@ -52,6 +54,25 @@ public class AdminBoardViewController {
         model.addAttribute("entityName", entityName);
 
         return "entity";
+    }
+
+    @GetMapping("/{entityName}/{id}")
+    public String EntityDetailView(
+            Model model,
+            @PathVariable("entityName") String entityName,
+            @PathVariable("id") Long id) {
+        getSideBarModel(model);
+        model.addAttribute("entity", adminBoardFactory.getEntity(entityName));
+        Object returnObject = null;
+        Optional<Object> object = adminBoardFactory.getObject(entityName, id);
+        if (object.isPresent()) {
+            returnObject = object.get();
+        }
+        model.addAttribute("object", returnObject);
+        model.addAttribute("entityName", entityName);
+        model.addAttribute("entities", adminBoardFactory.getEntities());
+
+        return "objectDetail";
     }
 
     @GetMapping("/table")

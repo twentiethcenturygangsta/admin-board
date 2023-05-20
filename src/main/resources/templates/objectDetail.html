@@ -20,11 +20,12 @@
 <body>
 <div class="wrapper">
     <th:block th:replace="~{fragments/sidebar :: SideBarFragment}"/>
+
     <div class="main-panel">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg " color-on-scroll="500">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#pablo" th:text="${groupName}"></a>
+                <a class="navbar-brand" href="#pablo"th:text="${entityName}"></a>
                 <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-bar burger-lines"></span>
                     <span class="navbar-toggler-bar burger-lines"></span>
@@ -92,118 +93,145 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card strpied-tabled-with-hover">
-                            <div class="card-header ">
-                                <h4 class="card-title"><span th:text="${entityName}"></span> Table </h4>
-                                <p class="card-category"><span th:text="${entity.getDescription()}"></span></p>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title" th:text="${entityName}"></h4>
                             </div>
-                            <div class="card-body table-full-width table-responsive">
-                                <table class="table table-hover table-striped">
-                                    <thead>
-                                    <th:block th:each="field, i : ${entity.getColumns()}">
-                                        <th:block th:if="${i.count le 6}">
-                                            <th>
-                                                <span th:text="${field.getName()}"></span>
-                                            </th>
-                                        </th:block>
-<!--                                    <th>ID</th>-->
-<!--                                    <th>Name</th>-->
-<!--                                    <th>Salary</th>-->
-<!--                                    <th>Country</th>-->
-<!--                                    <th>City</th>-->
-                                    </th:block>
-                                    </thead>
-                                    <tbody>
-                                    <th:block th:each="object, i : ${data}">
+                            <div class="card-body">
+<!--                                <th:block th:each="field, i : ${entity.getColumns}">-->
+<!--                                    <span th:text="${field.getName()}"></span>-->
+<!--                                    <span th:text="${field.getDescription()}"></span>-->
+<!--                                    <span th:text=""></span>-->
+<!--                                </th:block>-->
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <th:block th:each="field, i : ${entity.getColumns}">
+                                                    <label>
+                                                        <span th:text="${field.getName()}" style="margin-right:10px"></span>
+                                                        <span th:text="${field.getDescription()}" style="color: rebeccapurple; font-size: 10px"></span>
+                                                    </label>
+                                                    <th:block th:if="${field.getRelationType().name() == 'ONE_TO_MANY'}">
 
-                                        <tr style="cursor:hand">
-                                            <th:block th:each="field, i : ${entity.getColumns}">
-                                                <th:block th:if="${i.count le 6}">
-                                                    <th:block th:if="${field.getRelationType().name() != 'NON_RELATIONSHIP'}">
-                                                        <td>
-                                                            <span th:text="${field.getRelationType()}"></span>
-                                                        </td>
+                                                         <div class="col-md-12" style = "height: 500px; overflow: scroll">
+
+                                                                <th:block th:each="value, i :${@adminBoardFactory.getFieldMappingValue(object, field.getName())}">
+                                                                    <div class="card-body">
+
+                                                                        <th:block th:each="field1, j:${@adminBoardFactory.getEntity(value.getClass().getSimpleName()).getColumns()}">
+                                                                            <label>
+                                                                                <span th:text="${field1.getName()}" style="margin-right:10px"></span>
+                                                                                <span th:text="${field1.getDescription()}" style="color: rebeccapurple; font-size: 10px"></span>
+                                                                            </label>
+                                                                            <input type="text" class="form-control" disabled="" placeholder="Company" th:value="${@adminBoardFactory.getFieldMappingValue(value, field1.getName())}" style="margin-bottom: 10px">
+                                                                        </th:block>
+                                                                    </div>
+                                                                    <br />
+                                                                    <!--                                                                <th:block th:each="field, i : ${entities.get(value).getColumns}">-->
+    <!--                                                                </th:block>-->
+                                                                </th:block>
+                                                        </div>
                                                     </th:block>
 
-                                                    <th:block th:if="${field.getRelationType().name() == 'NON_RELATIONSHIP'}">
-                                                        <th:block th:if="${field.getIsId() == true}">
-                                                            <td>
-                                                                <a style="display:block; text-overflow: ellipsis; overflow:hidden; width:100px; white-space: nowrap; word-break: break-all;"
-                                                                      th:text="${@adminBoardFactory.getFieldMappingValue(object, field.getName())}"
-                                                                      th:href="@{/admin-board/{entityName}/{id} (entityName=${entityName}, id=${@adminBoardFactory.getFieldMappingValue(object, field.getName())})}"
-                                                                ></a>
-                                                            </td>
-                                                        </th:block>
-                                                        <th:block th:if="${field.getIsId() == false}">
-                                                            <td>
-                                                                <span style="display:block; text-overflow: ellipsis; overflow:hidden; width:100px; white-space: nowrap; word-break: break-all"
-                                                                        th:text="${@adminBoardFactory.getFieldMappingValue(object, field.getName())}"></span>
-                                                            </td>
-                                                        </th:block>
+                                                    <th:block th:if="${field.getRelationType().name() != 'ONE_TO_MANY'}">
+                                                        <input type="text" class="form-control" disabled="" placeholder="Company" th:value="${@adminBoardFactory.getFieldMappingValue(object, field.getName())}" style="margin-bottom: 10px">
                                                     </th:block>
-
-<!--                                            <td>1</td>-->
-<!--                                            <td>Dakota Rice</td>-->
-<!--                                            <td>$36,738</td>-->
-<!--                                            <td>Niger</td>-->
-<!--                                            <td>Oud-Turnhout</td>-->
                                                 </th:block>
-                                            </th:block>
-                                        </tr>
-                                    </th:block>
-<!--                                    <tr>-->
-<!--                                        <td>2</td>-->
-<!--                                        <td>Minerva Hooper</td>-->
-<!--                                        <td>$23,789</td>-->
-<!--                                        <td>Curaçao</td>-->
-<!--                                        <td>Sinaai-Waas</td>-->
-<!--                                    </tr>-->
-<!--                                    <tr>-->
-<!--                                        <td>3</td>-->
-<!--                                        <td>Sage Rodriguez</td>-->
-<!--                                        <td>$56,142</td>-->
-<!--                                        <td>Netherlands</td>-->
-<!--                                        <td>Baileux</td>-->
-<!--                                    </tr>-->
-<!--                                    <tr>-->
-<!--                                        <td>4</td>-->
-<!--                                        <td>Philip Chaney</td>-->
-<!--                                        <td>$38,735</td>-->
-<!--                                        <td>Korea, South</td>-->
-<!--                                        <td>Overland Park</td>-->
-<!--                                    </tr>-->
-<!--                                    <tr>-->
-<!--                                        <td>5</td>-->
-<!--                                        <td>Doris Greene</td>-->
-<!--                                        <td>$63,542</td>-->
-<!--                                        <td>Malawi</td>-->
-<!--                                        <td>Feldkirchen in Kärnten</td>-->
-<!--                                    </tr>-->
-<!--                                    <tr>-->
-<!--                                        <td>6</td>-->
-<!--                                        <td>Mason Porter</td>-->
-<!--                                        <td>$78,615</td>-->
-<!--                                        <td>Chile</td>-->
-<!--                                        <td>Gloucester</td>-->
-<!--                                    </tr>-->
-                                    </tbody>
-                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-md-6 pr-1">-->
+<!--                                            <div class="form-group">-->
+<!--                                                <label>First Name</label>-->
+<!--                                                <input type="text" class="form-control" placeholder="Company" value="Mike">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-md-6 pl-1">-->
+<!--                                            <div class="form-group">-->
+<!--                                                <label>Last Name</label>-->
+<!--                                                <input type="text" class="form-control" placeholder="Last Name" value="Andrew">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-md-12">-->
+<!--                                            <div class="form-group">-->
+<!--                                                <label>Address</label>-->
+<!--                                                <input type="text" class="form-control" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-md-4 pr-1">-->
+<!--                                            <div class="form-group">-->
+<!--                                                <label>City</label>-->
+<!--                                                <input type="text" class="form-control" placeholder="City" value="Mike">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-md-4 px-1">-->
+<!--                                            <div class="form-group">-->
+<!--                                                <label>Country</label>-->
+<!--                                                <input type="text" class="form-control" placeholder="Country" value="Andrew">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-md-4 pl-1">-->
+<!--                                            <div class="form-group">-->
+<!--                                                <label>Postal Code</label>-->
+<!--                                                <input type="number" class="form-control" placeholder="ZIP Code">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-md-12">-->
+<!--                                            <div class="form-group">-->
+<!--                                                <label>About Me</label>-->
+<!--                                                <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" value="Mike">Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</textarea>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+                                    <button type="submit" class="btn btn-info btn-fill pull-right">Update</button>
+                                    <div class="clearfix"></div>
+                                </form>
                             </div>
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination justify-content-center">
-                                    <li class="page-item disabled">
-                                        <a class="page-link">Previous</a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">Next</a>
-                                    </li>
-                                </ul>
-                            </nav>
                         </div>
                     </div>
+<!--                    <div class="col-md-4">-->
+<!--                        <div class="card card-user">-->
+<!--                            <div class="card-image">-->
+<!--                                <img src="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400" alt="...">-->
+<!--                            </div>-->
+<!--                            <div class="card-body">-->
+<!--                                <div class="author">-->
+<!--                                    <a href="#">-->
+<!--                                        <img class="avatar border-gray" src="../assets/img/faces/face-3.jpg" alt="...">-->
+<!--                                        <h5 class="title">Mike Andrew</h5>-->
+<!--                                    </a>-->
+<!--                                    <p class="description">-->
+<!--                                        michael24-->
+<!--                                    </p>-->
+<!--                                </div>-->
+<!--                                <p class="description text-center">-->
+<!--                                    "Lamborghini Mercy-->
+<!--                                    <br> Your chick she so thirsty-->
+<!--                                    <br> I'm in that two seat Lambo"-->
+<!--                                </p>-->
+<!--                            </div>-->
+<!--                            <hr>-->
+<!--                            <div class="button-container mr-auto ml-auto">-->
+<!--                                <button href="#" class="btn btn-simple btn-link btn-icon">-->
+<!--                                    <i class="fa fa-facebook-square"></i>-->
+<!--                                </button>-->
+<!--                                <button href="#" class="btn btn-simple btn-link btn-icon">-->
+<!--                                    <i class="fa fa-twitter"></i>-->
+<!--                                </button>-->
+<!--                                <button href="#" class="btn btn-simple btn-link btn-icon">-->
+<!--                                    <i class="fa fa-google-plus-square"></i>-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
             </div>
         </div>

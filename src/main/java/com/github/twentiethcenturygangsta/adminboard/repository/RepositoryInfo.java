@@ -16,6 +16,7 @@ public class RepositoryInfo {
     private final Object repositoryObject;
     private final Object idType;
     private final String domainName;
+    private final Object domain;
 
     @Builder
     public RepositoryInfo(List<Class<?>> repositoryInterfaces, Object repositoryObject, DefaultRepositoryMetadata metaData) {
@@ -23,6 +24,7 @@ public class RepositoryInfo {
         this.repositoryObject = repositoryObject;
         this.idType = metaData.getIdType();
         this.domainName = getRepositoryDomainName(metaData);
+        this.domain = metaData.getDomainType();
     }
 
     private String getRepositoryDomainName(DefaultRepositoryMetadata metadata) {
