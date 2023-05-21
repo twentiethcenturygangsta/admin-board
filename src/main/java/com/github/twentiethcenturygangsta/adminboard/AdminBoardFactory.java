@@ -69,7 +69,6 @@ public class AdminBoardFactory {
     }
 
     public Page<?> getObjects(String entityName, Pageable pageable) {
-        Long id = 1L;
         RepositoryInfo repositoryInfo = repositoryClient.getRepository(entityName);
         if(repositoryInfo.getRepositoryType() == JpaRepository.class) {
             JpaRepository<?, ?> repository = RepositoryBuilder.getJpaRepositoryInstance(
@@ -127,31 +126,6 @@ public class AdminBoardFactory {
             );
 
             return getter.invoke(root);
-        } catch (Exception e) {
-            // log exception
-        }
-        return null;
-    }
-    public Object getFieldMappingValueDepth(Object root, String fieldName) {
-        try {
-            Field field = root.getClass().getDeclaredField( fieldName );
-            Method getter = root.getClass().getDeclaredMethod(
-                    (field.getType().equals( boolean.class ) ? "is" : "get")
-                            + field.getName().substring(0, 1).toUpperCase( Locale.ROOT)
-                            + field.getName().substring(1)
-            );
-
-            Field field1 = root.getClass().getDeclaredField("id");
-            Method getter1 = root.getClass().getDeclaredMethod(
-                    (field1.getType().equals( boolean.class ) ? "is" : "get")
-                            + field1.getName().substring(0, 1).toUpperCase( Locale.ROOT)
-                            + field1.getName().substring(1)
-            );
-
-
-            Object object = getter.invoke(root);
-
-            return getter1.invoke(object);
         } catch (Exception e) {
             // log exception
         }
