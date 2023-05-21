@@ -1,5 +1,6 @@
 package com.github.twentiethcenturygangsta.adminboard;
 
+import com.github.twentiethcenturygangsta.adminboard.client.AdminBoardClient;
 import com.github.twentiethcenturygangsta.adminboard.client.EntityClient;
 import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryClient;
 import com.github.twentiethcenturygangsta.adminboard.view.AdminBoardViewController;
@@ -31,8 +32,8 @@ public class AdminBoardAutoConfiguration {
     }
 
     @Bean
-    public AdminBoardFactory adminBoardFactory(RepositoryClient repositoryClient, EntityClient entityClient) {
-        return new AdminBoardFactory(repositoryClient, entityClient);
+    public AdminBoardFactory adminBoardFactory(RepositoryClient repositoryClient,  AdminBoardClient adminBoardClient, EntityClient entityClient) {
+        return new AdminBoardFactory(repositoryClient, adminBoardClient, entityClient);
     }
 
     @Bean

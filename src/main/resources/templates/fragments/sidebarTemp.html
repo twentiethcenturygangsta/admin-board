@@ -1,0 +1,80 @@
+<th:block th:fragment="SideBarFragment">
+    <div class="sidebar" th:data-image="@{adminboard-resources/assets/img/sidebar-5.jpg}">
+        <!--
+    Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
+
+    Tip 2: you can also add an image using data-image tag
+-->
+        <div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="https://github.com/orgs/twentiethcenturygangsta/repositories" class="simple-text" th:text="${adminBoardInformation.get('title')}">
+                </a>
+                <div style="text-align: center; font-size: 10px; font-weight: 400" th:text="${adminBoardInformation.get('description')}"></div>
+            </div>
+            <ul class="nav">
+                <li>
+                    <a class="nav-link" th:href="@{/admin-board/home}">
+                        <i class="nc-icon nc-chart-pie-35"></i>
+                        <p>ADMIN USERS</p>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" th:href="@{/admin-board/tasks}">
+                        <i class="nc-icon nc-circle-09"></i>
+                        <p>TASKS</p>
+                    </a>
+                </li>
+                <div class="logo" style="padding-left:30px">
+                    Group
+                </div>
+                <li>
+                    <a class="nav-link" th:href="@{/admin-board/table}">
+                        <i class="nc-icon nc-notes"></i>
+                        <p>Table List</p>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" th:href="@{/admin-board/typography}">
+                        <i class="nc-icon nc-paper-2"></i>
+                        <p>Typography</p>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" th:href="@{/admin-board/icons}">
+                        <i class="nc-icon nc-atom"></i>
+                        <p>Icons</p>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" th:href="@{/admin-board/maps}">
+                        <i class="nc-icon nc-pin-3"></i>
+                        <p>Maps</p>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" th:href="@{/admin-board/notifications}">
+                        <i class="nc-icon nc-bell-55"></i>
+                        <p>Notifications</p>
+                    </a>
+                </li>
+<!--                <li class="nav-item nav-link active-pro">-->
+<!--                    <a class="nav-link active" th:href="@{/admin-board/upgrade}">-->
+<!--                        <i class="nc-icon nc-alien-33"></i>-->
+<!--                        <p>Upgrade to PRO</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+            </ul>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(".sidebar-wrapper ul li").click(function (e) {
+            let el = $(e.target).closest('li');
+            el.siblings('li').removeClass("active");
+            el.siblings('li').removeClass("nav-item");
+
+            el.addClass("active");
+            el.addClass("nav-item");
+
+        })
+    </script>
+</th:block>

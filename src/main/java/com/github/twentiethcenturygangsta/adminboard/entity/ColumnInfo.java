@@ -41,6 +41,14 @@ public class ColumnInfo {
         this.isAllowedBlank = field.isAnnotationPresent(NotBlank.class);
     }
 
+    public boolean getIsId() {
+        return isId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     private String getFieldDisplayName(Field field) {
         return AdminBoardStringConvertUtil.getFormattedColumnName(field.getName());
     }

@@ -1,7 +1,9 @@
 package com.github.twentiethcenturygangsta.adminboard.client;
 
 import lombok.Builder;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AdminBoardClient {
 
     private final UserCredentials userCredentials;

@@ -28,7 +28,7 @@ public class AdminBoardRegistrar implements ImportBeanDefinitionRegistrar {
         if (basePackages.length == 0) {
             packages.add(ClassUtils.getPackageName(importingClassMetadata.getClassName()));
         } else {
-            packages = Arrays.asList(basePackages);
+            packages.addAll(Arrays.asList(basePackages));
         }
         packages.add(ADMIN_BOARD_PACKAGE_NAME);
     }

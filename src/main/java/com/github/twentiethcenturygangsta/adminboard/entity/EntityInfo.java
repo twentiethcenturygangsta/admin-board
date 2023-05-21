@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,8 +46,10 @@ public class EntityInfo {
     private List<ColumnInfo> getObjectColumns(Class<?> object) {
         List<ColumnInfo> columns = new ArrayList<>();
         for (Field field : object.getDeclaredFields()) {
-            ColumnInfo column = ColumnInfo.builder().field(field).build();
-            columns.add(column);
+            if (!isStaticField(field)) {
+                ColumnInfo column = ColumnInfo.builder().field(field).build();
+                columns.add(column);
+            }
         }
         return columns;
     }
@@ -60,5 +63,9 @@ public class EntityInfo {
             return annotationsWithAdminBoardEntity.get(0);
         }
         throw new RuntimeException("Not AdminBoardEntity");
+    }
+
+    private boolean isStaticField(Field field) {
+        return Modifier.isStatic(field.getModifiers());
     }
 }

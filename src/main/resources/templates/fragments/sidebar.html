@@ -7,56 +7,73 @@
 -->
         <div class="sidebar-wrapper">
             <div class="logo">
-                <a href="https://github.com/orgs/twentiethcenturygangsta/repositories" class="simple-text">
-                    ADMIN BOARD
+                <a href="https://github.com/orgs/twentiethcenturygangsta/repositories" class="simple-text" th:text="${adminBoardInformation.get('title')}">
                 </a>
+                <div style="text-align: center; font-size: 10px; font-weight: 400" th:text="${adminBoardInformation.get('description')}"></div>
             </div>
             <ul class="nav">
                 <li>
-                    <a class="nav-link" th:href="@{/admin-board/home}">
-                        <i class="nc-icon nc-chart-pie-35"></i>
-                        <p>Dashboard</p>
+                    <a class="nav-link" th:href="@{/admin-board/admin-user}">
+                        <i class="nc-icon nc-circle-09"></i>
+                        <p>ADMIN USERS</p>
                     </a>
                 </li>
+                <li>
+                    <a class="nav-link" th:href="@{/admin-board/tasks}">
+                        <i class="nc-icon nc-notes"></i>
+                        <p>TASKS</p>
+                    </a>
+                </li>
+
+                <th:block th:each="group, index : ${entitiesByGroup}">
+                    <div class="logo" style="padding-left:30px">
+                        <span th:text="${group.key}"></span>
+                    </div>
+                    <th:block th:each="entity, index : ${group.value}">
+                        <li>
+                            <a class="nav-link" th:href="@{/admin-board/{entityName}(entityName=${entity.getName()})}">
+                                <i class="nc-icon nc-circle-09"></i>
+                                <p th:text="${entity.getDisplayName()}"></p>
+                            </a>
+                        </li>
+                    </th:block>
+                </th:block>
                 <li>
                     <a class="nav-link" th:href="@{/admin-board/user}">
                         <i class="nc-icon nc-circle-09"></i>
-                        <p>User Profile</p>
+                        <p>User</p>
                     </a>
                 </li>
-                <div class="logo" style="padding-left:30px">
-                    Group
-                </div>
-                <li>
-                    <a class="nav-link" th:href="@{/admin-board/table}">
-                        <i class="nc-icon nc-notes"></i>
-                        <p>Table List</p>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link" th:href="@{/admin-board/typography}">
-                        <i class="nc-icon nc-paper-2"></i>
-                        <p>Typography</p>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link" th:href="@{/admin-board/icons}">
-                        <i class="nc-icon nc-atom"></i>
-                        <p>Icons</p>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link" th:href="@{/admin-board/maps}">
-                        <i class="nc-icon nc-pin-3"></i>
-                        <p>Maps</p>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link" th:href="@{/admin-board/notifications}">
-                        <i class="nc-icon nc-bell-55"></i>
-                        <p>Notifications</p>
-                    </a>
-                </li>
+<!--                <li>-->
+<!--                    <a class="nav-link" th:href="@{/admin-board/table}">-->
+<!--                        <i class="nc-icon nc-notes"></i>-->
+<!--                        <p>Table List</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <a class="nav-link" th:href="@{/admin-board/typography}">-->
+<!--                        <i class="nc-icon nc-paper-2"></i>-->
+<!--                        <p>Typography</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <a class="nav-link" th:href="@{/admin-board/icons}">-->
+<!--                        <i class="nc-icon nc-atom"></i>-->
+<!--                        <p>Icons</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <a class="nav-link" th:href="@{/admin-board/maps}">-->
+<!--                        <i class="nc-icon nc-pin-3"></i>-->
+<!--                        <p>Maps</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <a class="nav-link" th:href="@{/admin-board/notifications}">-->
+<!--                        <i class="nc-icon nc-bell-55"></i>-->
+<!--                        <p>Notifications</p>-->
+<!--                    </a>-->
+<!--                </li>-->
 <!--                <li class="nav-item nav-link active-pro">-->
 <!--                    <a class="nav-link active" th:href="@{/admin-board/upgrade}">-->
 <!--                        <i class="nc-icon nc-alien-33"></i>-->
