@@ -46,7 +46,7 @@ public class EntityInfo {
     private List<ColumnInfo> getObjectColumns(Class<?> object) {
         List<ColumnInfo> columns = new ArrayList<>();
         for (Field field : object.getDeclaredFields()) {
-            if (isStaticField(field)) {
+            if (!isStaticField(field)) {
                 ColumnInfo column = ColumnInfo.builder().field(field).build();
                 columns.add(column);
             }
