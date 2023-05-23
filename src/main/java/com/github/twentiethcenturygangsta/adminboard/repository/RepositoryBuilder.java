@@ -1,30 +1,46 @@
 package com.github.twentiethcenturygangsta.adminboard.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.ListCrudRepository;
-import org.springframework.data.repository.ListPagingAndSortingRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
+public class RepositoryBuilder<T, ID> {
+    private final Object repositoryObject;
+    private final T domainClass;
+    private final ID idType;
 
-public class RepositoryBuilder {
-
-    public static <T, ID> JpaRepository<T, ID> getJpaRepositoryInstance(Object object, T domain, ID id ) {
-        return (JpaRepository<T, ID>) object;
+    private RepositoryBuilder(Object repositoryObject, T domainClass, ID idType) {
+        this.repositoryObject = repositoryObject;
+        this.domainClass = domainClass;
+        this.idType = idType;
     }
 
-    public static <T, ID> CrudRepository<T, ID> getCrudRepositoryInstance(Object object, T domain, ID id) {
-        return (CrudRepository<T, ID>) object;
+    public static <T, ID> RepositoryBuilder<T, ID> forObject(Object repositoryObject, T domainClass, ID idType) {
+        return new RepositoryBuilder<>(repositoryObject, domainClass, idType);
     }
 
-    public static <T, ID> ListCrudRepository<T, ID> getListCrudRepositoryInstance(Object object, T domain, ID id) {
-        return (ListCrudRepository<T, ID>) object;
+    public <R> R build(Class<R> repositoryType) {
+        if (repositoryType.isInstance(repositoryObject)) {
+            return repositoryType.cast(repositoryObject);
+        } else {
+            throw new IllegalArgumentException("Repository object is not an instance of " + repositoryType.getName());
+        }
     }
 
-    public static <T, ID> ListPagingAndSortingRepository<T, ID> getListPagingAndSortingRepositoryInstance(Object object, T domain, ID id) {
-        return (ListPagingAndSortingRepository<T, ID>) object;
-    }
-
-    public static <T, ID> PagingAndSortingRepository<T, ID> getPagingAndSortingRepositoryInstance(Object object, T domain, ID id) {
-        return (PagingAndSortingRepository<T, ID>) object;
-    }
+//    @SuppressWarnings("unchecked")
+//    public JpaRepository<T, ID> buildJpaRepository() {
+//        return build(JpaRepository.class);
+//    }
+//
+//    public CrudRepository<T, ID> buildCrudRepository() {
+//        return build(CrudRepository.class);
+//    }
+//
+//    public ListCrudRepository<T, ID> buildListCrudRepository() {
+//        return build(ListCrudRepository.class);
+//    }
+//
+//    public ListPagingAndSortingRepository<T, ID> buildListPagingAndSortingRepository() {
+//        return build(ListPagingAndSortingRepository.class);
+//    }
+//
+//    public PagingAndSortingRepository<T, ID> buildPagingAndSortingRepository() {
+//        return build(PagingAndSortingRepository.class);
+//    }
 }

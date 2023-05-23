@@ -48,7 +48,11 @@ public class RepositoryClient {
     }
 
     public RepositoryInfo getRepository(String domainName) {
-        return repositories.get(domainName);
+        try {
+            return repositories.get(domainName);
+        } catch (NullPointerException ex) {
+            throw new RuntimeException("Not Exist Repository");
+        }
     }
 
     private RepositoryInfo setRepository(DefaultRepositoryMetadata metadata) {

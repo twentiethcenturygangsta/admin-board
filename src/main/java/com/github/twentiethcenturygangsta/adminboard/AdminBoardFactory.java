@@ -70,49 +70,21 @@ public class AdminBoardFactory {
 
     public Page<?> getObjects(String entityName, Pageable pageable) {
         RepositoryInfo repositoryInfo = repositoryClient.getRepository(entityName);
-        if(repositoryInfo.getRepositoryType() == JpaRepository.class) {
-            JpaRepository<?, ?> repository = RepositoryBuilder.getJpaRepositoryInstance(
-                    repositoryInfo.getRepositoryObject(),
-                    repositoryInfo.getDomain(),
-                    repositoryInfo.getIdType()
-            );
-            return repository.findAll(pageable);
-        }
-        if(repositoryInfo.getRepositoryType() == PagingAndSortingRepository.class) {
-            PagingAndSortingRepository<?, ?> repository = RepositoryBuilder.getPagingAndSortingRepositoryInstance(
-                    repositoryInfo.getRepositoryObject(),
-                    repositoryInfo.getDomain(),
-                    repositoryInfo.getIdType()
-            );
-            return repository.findAll(pageable);
-        }
-        ListPagingAndSortingRepository<?, ?> repository = RepositoryBuilder.getListPagingAndSortingRepositoryInstance(
-                repositoryInfo.getRepositoryObject(),
-                repositoryInfo.getDomain(),
-                repositoryInfo.getIdType()
-        );
+        Object repositoryObject = repositoryInfo.getRepositoryObject();
+
+        RepositoryBuilder<?, ?> repositoryBuilder = RepositoryBuilder.forObject(repositoryObject, repositoryInfo.getDomain(), repositoryInfo.getIdType());
+
+        PagingAndSortingRepository<?, ?> repository = repositoryBuilder.build(PagingAndSortingRepository.class);
         return repository.findAll(pageable);
     }
 
     public Optional<Object> getObject(String entityName, Long entityObjectId) {
         RepositoryInfo repositoryInfo = repositoryClient.getRepository(entityName);
-        if(repositoryInfo.getRepositoryType() == JpaRepository.class) {
-            JpaRepository<Object, Object> repository = RepositoryBuilder.getJpaRepositoryInstance(repositoryInfo.getRepositoryObject(), repositoryInfo.getDomain(), repositoryInfo.getIdType());
-            return repository.findById(entityObjectId);
-        }
-        if(repositoryInfo.getRepositoryType() == CrudRepository.class) {
-            CrudRepository<Object, Object> repository = RepositoryBuilder.getCrudRepositoryInstance(
-                    repositoryInfo.getRepositoryObject(),
-                    repositoryInfo.getDomain(),
-                    repositoryInfo.getIdType()
-            );
-            return repository.findById(entityObjectId);
-        }
-        ListCrudRepository<Object, Object> repository = RepositoryBuilder.getListCrudRepositoryInstance(
-                repositoryInfo.getRepositoryObject(),
-                repositoryInfo.getDomain(),
-                repositoryInfo.getIdType()
-        );
+        Object repositoryObject = repositoryInfo.getRepositoryObject();
+
+        RepositoryBuilder<Object, Object> repositoryBuilder = RepositoryBuilder.forObject(repositoryObject, repositoryInfo.getDomain(), repositoryInfo.getIdType());
+
+        CrudRepository<Object, Object> repository = repositoryBuilder.build(CrudRepository.class);
         return repository.findById(entityObjectId);
     }
 
