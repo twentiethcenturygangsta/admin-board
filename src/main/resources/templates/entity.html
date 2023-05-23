@@ -103,7 +103,7 @@
                                     <th:block th:each="field, i : ${entity.getColumns()}">
                                         <th:block th:if="${i.count le 6}">
                                             <th>
-                                                <span th:text="${field.getName()}"></span>
+                                                <span th:text="${field.getDisplayName()}"></span>
                                             </th>
                                         </th:block>
 <!--                                    <th>ID</th>-->

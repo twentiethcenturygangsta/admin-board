@@ -109,7 +109,7 @@
                                             <div class="form-group">
                                                 <th:block th:each="field, i : ${entity.getColumns}">
                                                     <label>
-                                                        <span th:text="${field.getName()}" style="margin-right:10px"></span>
+                                                        <span th:text="${field.getDisplayName()}" style="margin-right:10px"></span>
                                                         <span th:text="${field.getDescription()}" style="color: rebeccapurple; font-size: 10px"></span>
                                                     </label>
                                                     <th:block th:if="${field.getRelationType().name() == 'ONE_TO_MANY'}">
@@ -121,7 +121,7 @@
 
                                                                         <th:block th:each="field1, j:${@adminBoardFactory.getEntity(value.getClass().getSimpleName()).getColumns()}">
                                                                             <label>
-                                                                                <span th:text="${field1.getName()}" style="margin-right:10px"></span>
+                                                                                <span th:text="${field1.getDisplayName()}" style="margin-right:10px"></span>
                                                                                 <span th:text="${field1.getDescription()}" style="color: rebeccapurple; font-size: 10px"></span>
                                                                             </label>
                                                                             <input type="text" class="form-control" disabled="" placeholder="Company" th:value="${@adminBoardFactory.getFieldMappingValue(value, field1.getName())}" style="margin-bottom: 10px">

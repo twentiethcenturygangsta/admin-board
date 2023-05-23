@@ -1,5 +1,6 @@
 package com.github.twentiethcenturygangsta.adminboard.client;
 
+import com.github.twentiethcenturygangsta.adminboard.entity.AdminBoardUser;
 import lombok.Builder;
 import org.springframework.stereotype.Component;
 
@@ -21,5 +22,16 @@ public class AdminBoardClient {
 
     public AdminBoardInfo getAdminBoardInfo() {
         return adminBoardInfo;
+    }
+
+    public AdminBoardUser createAdminBoardUser() {
+        return AdminBoardUser.builder()
+                .userId(userCredentials.getMemberId())
+                .password(userCredentials.getPassword())
+                .hasCreateAdminBoardUserAuthority(true)
+                .hasCreateObjectAuthority(true)
+                .hasUpdateObjectAuthority(true)
+                .hasDeleteObjectAuthority(true)
+                .build();
     }
 }

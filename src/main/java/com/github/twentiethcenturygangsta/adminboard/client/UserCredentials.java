@@ -35,6 +35,7 @@ public class UserCredentials {
     public String getMemberId() {
         return memberId;
     }
+    public String getPassword() {return password;}
 
     public Role getRole() {
         return role;

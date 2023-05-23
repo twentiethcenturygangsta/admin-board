@@ -27,8 +27,8 @@ public class AdminBoardStringConvertUtil {
         for(int i = 0; i<fieldName.length(); i++) {
             if (Character.isUpperCase(fieldName.charAt(i))) {
                 convertedFieldName.append(WHITE_SPACE);
-                convertedFieldName.append(i);
             }
+            convertedFieldName.append(fieldName.charAt(i));
         }
         return convertedFieldName.toString();
     }

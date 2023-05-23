@@ -2,14 +2,20 @@ package com.github.twentiethcenturygangsta.adminboard;
 
 import com.github.twentiethcenturygangsta.adminboard.client.AdminBoardClient;
 import com.github.twentiethcenturygangsta.adminboard.client.EntityClient;
+import com.github.twentiethcenturygangsta.adminboard.entity.AdminBoardUser;
+import com.github.twentiethcenturygangsta.adminboard.repository.AdminBoardUserRepository;
 import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryClient;
 import com.github.twentiethcenturygangsta.adminboard.view.AdminBoardViewController;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
+@EntityScan(basePackages = "com.github.twentiethcenturygangsta.adminboard")
+@EnableJpaRepositories("com.github.twentiethcenturygangsta.adminboard")
 public class AdminBoardAutoConfiguration {
 
     @Bean
@@ -37,8 +43,15 @@ public class AdminBoardAutoConfiguration {
     }
 
     @Bean
-    public AdminBoardViewController adminBoardviewController(AdminBoardFactory adminBoardFactory) {
-        return new AdminBoardViewController(adminBoardFactory);
+    public AdminBoardViewController adminBoardviewController(AdminBoardFactory adminBoardFactory, AdminBoardServiceFactory adminBoardServiceFactory) {
+        return new AdminBoardViewController(adminBoardFactory, adminBoardServiceFactory);
+    }
+
+    @Bean
+    public AdminBoardServiceFactory adminBoardServiceFactory(AdminBoardUserRepository adminBoardUserRepository, AdminBoardClient adminBoardClient) {
+        AdminBoardServiceFactory adminBoardServiceFactory = new AdminBoardServiceFactory(adminBoardUserRepository, adminBoardClient);
+        adminBoardServiceFactory.createSuperAdminBoardUser();
+        return adminBoardServiceFactory;
     }
 
     @Bean

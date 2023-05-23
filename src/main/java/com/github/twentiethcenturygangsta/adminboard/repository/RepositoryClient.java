@@ -34,6 +34,7 @@ public class RepositoryClient {
         for(String basePackage : basePackages) {
             repositories.addAll(new Reflections(basePackage).getTypesAnnotatedWith(Repository.class));
         }
+        log.info("repositories = {}", repositories);
         for (Class<?> object : repositories) {
             DefaultRepositoryMetadata metadata = new DefaultRepositoryMetadata(object);
 
@@ -52,8 +53,10 @@ public class RepositoryClient {
 
     private RepositoryInfo setRepository(DefaultRepositoryMetadata metadata) {
         Repositories repositoriesInApplicationContext = new Repositories(applicationContext);
-        Object repository = repositoriesInApplicationContext.getRepositoryFor(metadata.getDomainType()).orElseThrow(() -> new RuntimeException("Not exist Repository"));
+        log.info("repositoriesInApplicationContext = {} {}", repositoriesInApplicationContext, metadata.getDomainType());
 
+        Object repository = repositoriesInApplicationContext.getRepositoryFor(metadata.getDomainType()).orElseThrow(() -> new RuntimeException("Not exist Repository"));
+        log.info("object = {}", repository);
         List<Class<?>> repositoryInterfaces = Arrays.asList(metadata.getRepositoryInterface().getInterfaces());
         return RepositoryInfo.builder()
                     .repositoryInterfaces(repositoryInterfaces)

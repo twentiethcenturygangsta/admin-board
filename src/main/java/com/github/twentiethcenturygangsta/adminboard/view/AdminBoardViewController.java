@@ -1,6 +1,7 @@
 package com.github.twentiethcenturygangsta.adminboard.view;
 
 import com.github.twentiethcenturygangsta.adminboard.AdminBoardFactory;
+import com.github.twentiethcenturygangsta.adminboard.AdminBoardServiceFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -17,9 +18,11 @@ import java.util.Optional;
 @RequestMapping("/admin-board")
 public class AdminBoardViewController {
     private final AdminBoardFactory adminBoardFactory;
+    private final AdminBoardServiceFactory adminBoardServiceFactory;
 
-    public AdminBoardViewController(final AdminBoardFactory adminBoardFactory) {
+    public AdminBoardViewController(final AdminBoardFactory adminBoardFactory, final AdminBoardServiceFactory adminBoardServiceFactory) {
         this.adminBoardFactory = adminBoardFactory;
+        this.adminBoardServiceFactory = adminBoardServiceFactory;
     }
 
     @GetMapping("/home")
@@ -39,10 +42,12 @@ public class AdminBoardViewController {
     }
 
     @GetMapping("/admin-user")
-    public String AdminUserView(Model model) {
+    public String AdminUserView(Model model, @PageableDefault Pageable pageable) {
         getSideBarModel(model);
-        model.addAttribute("data", adminBoardFactory.getEntities());
-        model.addAttribute("entityName", "AdminUser");
+        model.addAttribute("data", adminBoardServiceFactory.getAdminBoardUsers(pageable));
+        model.addAttribute("entity", adminBoardFactory.getEntity("AdminBoardUser"));
+        model.addAttribute("groupName", "AdminBoard");
+        model.addAttribute("entityName", "AdminBoardUser");
         return "adminUser";
     }
 

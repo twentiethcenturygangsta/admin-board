@@ -26,6 +26,7 @@
                 </li>
 
                 <th:block th:each="group, index : ${entitiesByGroup}">
+                    <th:block th:if="${group.key} != 'AdminBoard'">
                     <div class="logo" style="padding-left:30px">
                         <span th:text="${group.key}"></span>
                     </div>
@@ -36,6 +37,7 @@
                                 <p th:text="${entity.getDisplayName()}"></p>
                             </a>
                         </li>
+                    </th:block>
                     </th:block>
                 </th:block>
                 <li>
