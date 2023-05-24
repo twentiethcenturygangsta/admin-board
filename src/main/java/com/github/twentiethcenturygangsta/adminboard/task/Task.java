@@ -1,11 +1,9 @@
-package com.github.twentiethcenturygangsta.adminboard.entity;
+package com.github.twentiethcenturygangsta.adminboard.task;
 
 import com.github.twentiethcenturygangsta.adminboard.annotation.AdminBoardColumn;
 import com.github.twentiethcenturygangsta.adminboard.annotation.AdminBoardEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.github.twentiethcenturygangsta.adminboard.entity.AdminBoardUser;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,9 +25,14 @@ public class Task {
     private String content;
     private Boolean isCompleted;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_board_user_id")
+    private AdminBoardUser adminBoardUser;
+
     @Builder
-    public Task(String content, Boolean isCompleted) {
+    public Task(String content, Boolean isCompleted, AdminBoardUser adminBoardUser) {
         this.content = content;
         this.isCompleted = isCompleted;
+        this.adminBoardUser = adminBoardUser;
     }
 }

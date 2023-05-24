@@ -2,14 +2,15 @@ package com.github.twentiethcenturygangsta.adminboard.entity;
 
 import com.github.twentiethcenturygangsta.adminboard.annotation.AdminBoardColumn;
 import com.github.twentiethcenturygangsta.adminboard.annotation.AdminBoardEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.github.twentiethcenturygangsta.adminboard.task.Task;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,6 +36,9 @@ public class AdminBoardUser {
     private Boolean hasUpdateObjectAuthority;
     @AdminBoardColumn(description = "테이블 데이터를 삭제할 수 있는 권한")
     private Boolean hasDeleteObjectAuthority;
+
+    @OneToMany(mappedBy = "admin_board_user", cascade = CascadeType.ALL)
+    private final List<Task> tasks = new ArrayList<>();
 
     @Builder
     public AdminBoardUser(
