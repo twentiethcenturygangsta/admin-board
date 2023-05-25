@@ -1,6 +1,6 @@
 package com.github.twentiethcenturygangsta.adminboard.client;
 
-import com.github.twentiethcenturygangsta.adminboard.entity.AdminBoardUser;
+import com.github.twentiethcenturygangsta.adminboard.user.AdminBoardUser;
 import lombok.Builder;
 import org.springframework.stereotype.Component;
 

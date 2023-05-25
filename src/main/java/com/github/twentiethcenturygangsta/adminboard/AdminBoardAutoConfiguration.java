@@ -2,9 +2,9 @@ package com.github.twentiethcenturygangsta.adminboard;
 
 import com.github.twentiethcenturygangsta.adminboard.client.AdminBoardClient;
 import com.github.twentiethcenturygangsta.adminboard.client.EntityClient;
-import com.github.twentiethcenturygangsta.adminboard.entity.AdminBoardUser;
 import com.github.twentiethcenturygangsta.adminboard.repository.AdminBoardUserRepository;
 import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryClient;
+import com.github.twentiethcenturygangsta.adminboard.view.AdminBoardViewActionController;
 import com.github.twentiethcenturygangsta.adminboard.view.AdminBoardViewController;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -43,8 +43,13 @@ public class AdminBoardAutoConfiguration {
     }
 
     @Bean
-    public AdminBoardViewController adminBoardviewController(AdminBoardFactory adminBoardFactory, AdminBoardServiceFactory adminBoardServiceFactory) {
-        return new AdminBoardViewController(adminBoardFactory, adminBoardServiceFactory);
+    public AdminBoardViewController adminBoardviewController(AdminBoardFactory adminBoardFactory, AdminBoardServiceFactory adminBoardServiceFactory, AdminBoardLoginService adminBoardLoginService) {
+        return new AdminBoardViewController(adminBoardFactory, adminBoardServiceFactory, adminBoardLoginService);
+    }
+
+    @Bean
+    public AdminBoardViewActionController adminBoardViewActionController(AdminBoardServiceFactory adminBoardServiceFactory, AdminBoardLoginService adminBoardLoginService) {
+        return new AdminBoardViewActionController(adminBoardServiceFactory, adminBoardLoginService);
     }
 
     @Bean
@@ -52,6 +57,11 @@ public class AdminBoardAutoConfiguration {
         AdminBoardServiceFactory adminBoardServiceFactory = new AdminBoardServiceFactory(adminBoardUserRepository, adminBoardClient);
         adminBoardServiceFactory.createSuperAdminBoardUser();
         return adminBoardServiceFactory;
+    }
+
+    @Bean
+    public AdminBoardLoginService adminBoardLoginService(AdminBoardUserRepository adminBoardUserRepository) {
+        return new AdminBoardLoginService(adminBoardUserRepository);
     }
 
     @Bean

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/adminboard-resources/css/style.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="login-container">
+    <div class="login-box">
+        <div class="logo">
+            <img src="path/to/your/logo.png" alt="Logo">
+        </div>
+        <h2>Welcome Back!</h2>
+        <form id="login-form" th:action="@{/admin-board/action/login}" th:object="${login}" method="post">
+            <div class="form-group">
+                <label for="memberId">Username</label>
+                <input type="text" name="memberId" id="memberId" th:field="*{memberId}" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" th:field="*{password}" placeholder="Enter your password" required>
+            </div>
+            <div th:if="${error}">
+                <p th:text="${error}" class="error-message"></p>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div class="signup-link">
+            Don't have an account? <a href="#">Sign up</a>
+        </div>
+    </div>
+</div>
+
+<script src="/adminboard-resources/js/script.js"></script>
+</body>
+</html>

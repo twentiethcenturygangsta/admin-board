@@ -1,4 +1,4 @@
-package com.github.twentiethcenturygangsta.adminboard.entity;
+package com.github.twentiethcenturygangsta.adminboard.user;
 
 import com.github.twentiethcenturygangsta.adminboard.annotation.AdminBoardColumn;
 import com.github.twentiethcenturygangsta.adminboard.annotation.AdminBoardEntity;
@@ -37,7 +37,7 @@ public class AdminBoardUser {
     @AdminBoardColumn(description = "테이블 데이터를 삭제할 수 있는 권한")
     private Boolean hasDeleteObjectAuthority;
 
-    @OneToMany(mappedBy = "admin_board_user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "adminBoardUser", cascade = CascadeType.ALL)
     private final List<Task> tasks = new ArrayList<>();
 
     @Builder

@@ -1,7 +1,7 @@
 package com.github.twentiethcenturygangsta.adminboard;
 
 import com.github.twentiethcenturygangsta.adminboard.client.AdminBoardClient;
-import com.github.twentiethcenturygangsta.adminboard.entity.AdminBoardUser;
+import com.github.twentiethcenturygangsta.adminboard.user.AdminBoardUser;
 import com.github.twentiethcenturygangsta.adminboard.repository.AdminBoardUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

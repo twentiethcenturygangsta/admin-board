@@ -1,13 +1,16 @@
 package com.github.twentiethcenturygangsta.adminboard.view;
 
 import com.github.twentiethcenturygangsta.adminboard.AdminBoardFactory;
+import com.github.twentiethcenturygangsta.adminboard.AdminBoardLoginService;
 import com.github.twentiethcenturygangsta.adminboard.AdminBoardServiceFactory;
+import com.github.twentiethcenturygangsta.adminboard.user.LoginRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -19,18 +22,22 @@ import java.util.Optional;
 public class AdminBoardViewController {
     private final AdminBoardFactory adminBoardFactory;
     private final AdminBoardServiceFactory adminBoardServiceFactory;
+    private final AdminBoardLoginService adminBoardLoginService;
 
-    public AdminBoardViewController(final AdminBoardFactory adminBoardFactory, final AdminBoardServiceFactory adminBoardServiceFactory) {
+    public AdminBoardViewController(
+            final AdminBoardFactory adminBoardFactory,
+            final AdminBoardServiceFactory adminBoardServiceFactory,
+            final AdminBoardLoginService adminBoardLoginService
+    ) {
         this.adminBoardFactory = adminBoardFactory;
         this.adminBoardServiceFactory = adminBoardServiceFactory;
+        this.adminBoardLoginService = adminBoardLoginService;
     }
 
     @GetMapping("/home")
     public String HomeView(Model model) {
-
         log.info("entities = {}", adminBoardFactory.getEntities());
         log.info("data = {}", adminBoardFactory.getEntitiesByGroup());
-
         return "home";
     }
 
@@ -119,14 +126,15 @@ public class AdminBoardViewController {
 
 
     @GetMapping("/login")
-    public String LoginView(Model model) {
+    public String LoginView(@ModelAttribute("login") LoginRequestDto loginRequestDto) {
         return "login";
     }
 
-    @GetMapping("/tasks")
-    public String TaskView(Model model) {
+    @GetMapping("/task")
+    public String TaskView(Model model, @PageableDefault Pageable pageable) {
         getSideBarModel(model);
-        model.addAttribute("entityName", "tasks");
+        model.addAttribute("data", adminBoardFactory.getObjects("Task", pageable));
+        model.addAttribute("entityName", "Task");
         return "tasks";
     }
 
