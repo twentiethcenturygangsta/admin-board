@@ -1,16 +1,12 @@
 package com.github.twentiethcenturygangsta.adminboard.task;
 
-import com.github.twentiethcenturygangsta.adminboard.annotation.AdminBoardColumn;
 import com.github.twentiethcenturygangsta.adminboard.annotation.AdminBoardEntity;
-import com.github.twentiethcenturygangsta.adminboard.entity.AdminBoardUser;
+import com.github.twentiethcenturygangsta.adminboard.user.AdminBoardUser;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
