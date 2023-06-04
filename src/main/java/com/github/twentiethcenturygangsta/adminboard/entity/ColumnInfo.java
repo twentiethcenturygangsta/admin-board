@@ -31,7 +31,7 @@ public class ColumnInfo {
     public ColumnInfo(Field field) {
         this.name = field.getName();
         this.displayName = getFieldDisplayName(field);
-        this.type = field.getType().getName();
+        this.type = field.getType().getSimpleName();
         this.relationType = getFieldRelationType(field);
         this.maxSize = getFieldMaxSize(field);
         this.isId = field.isAnnotationPresent(Id.class);
