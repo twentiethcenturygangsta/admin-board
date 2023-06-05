@@ -1,0 +1,303 @@
+<!--
+=========================================================
+ Light Bootstrap Dashboard - v2.0.1
+=========================================================
+
+ Product Page: https://www.creative-tim.com/product/light-bootstrap-dashboard
+ Copyright 2019 Creative Tim (https://www.creative-tim.com)
+ Licensed under MIT (https://github.com/creativetimofficial/light-bootstrap-dashboard/blob/master/LICENSE)
+
+ Coded by Creative Tim
+
+=========================================================
+
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.  -->
+<!DOCTYPE html>
+<html lang="en">
+
+<th:block th:replace="~{fragments/header :: AdminHeadFragment}"/>
+
+<body>
+<div class="wrapper">
+    <th:block th:replace="~{fragments/sidebar :: SideBarFragment}"/>
+
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg " color-on-scroll="500">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#pablo" th:text="${entityName}"></a>
+                <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                        aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-bar burger-lines"></span>
+                    <span class="navbar-toggler-bar burger-lines"></span>
+                    <span class="navbar-toggler-bar burger-lines"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="dropdown">
+                                <i class="nc-icon nc-palette"></i>
+                                <span class="d-lg-none">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="dropdown nav-item">
+                            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                <i class="nc-icon nc-planet"></i>
+                                <span class="notification">5</span>
+                                <span class="d-lg-none">Notification</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Notification 1</a>
+                                <a class="dropdown-item" href="#">Notification 2</a>
+                                <a class="dropdown-item" href="#">Notification 3</a>
+                                <a class="dropdown-item" href="#">Notification 4</a>
+                                <a class="dropdown-item" href="#">Another notification</a>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nc-icon nc-zoom-split"></i>
+                                <span class="d-lg-block">&nbsp;Search</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#pablo">
+                                <span class="no-icon">Account</span>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="no-icon">Dropdown</span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                                <div class="divider"></div>
+                                <a class="dropdown-item" href="#">Separated link</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#pablo">
+                                <span class="no-icon">Log out</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title" th:text="${entityName}"></h4>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <th:block th:each="field, i : ${entity.getColumns}">
+                                                    <label>
+                                                        <span th:text="${field.getDisplayName()}"
+                                                              style="margin-right:10px"></span>
+                                                        <span th:text="${field.getDescription()}"
+                                                              style="color: rebeccapurple; font-size: 10px"></span>
+                                                    </label>
+                                                    <th:block
+                                                            th:if="${field.getRelationType().name() != 'NON_RELATIONSHIP'}">
+                                                        <div class="api">
+                                                            <div class="row">
+                                                                <div class="col-md-2">
+                                                                    <select th:id="'searchType-' + ${@adminBoardFactory.getEntity(field.getType()).getName()}"
+                                                                            class="form-select form-select-sm form-group"
+                                                                            aria-label=".form-select-sm example">
+                                                                        <th:block
+                                                                                th:each="value, i: ${@adminBoardFactory.getEntity(field.getType()).getColumns()}">
+                                                                            <th:block
+                                                                                    th:if="${value.getRelationType().name() == 'NON_RELATIONSHIP' && value.getIsId() == false}">
+                                                                                <option th:value="${value.getName()}"
+                                                                                        th:text="${value.getDisplayName()}"></option>
+                                                                            </th:block>
+                                                                        </th:block>
+                                                                        <!-- 필요한 검색 조건을 추가할 수 있습니다 -->
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="value"
+                                                                           th:id="'searchKeyword-' + ${@adminBoardFactory.getEntity(field.getType()).getName()}"
+                                                                           value="" name="keyword" id="keyword">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <button th:id="${@adminBoardFactory.getEntity(field.getType()).getName()}">
+                                                                        SEARCH
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12" style="height: 500px; overflow: scroll">
+                                                            <div class="card-body table-full-width table-responsive">
+                                                                <table class="pagination-results table table-hover table-striped">
+                                                                    <thead id="searchResultsHeader">
+                                                                    <th:block
+                                                                            th:each="field1, i : ${@adminBoardFactory.getEntity(field.getType()).getColumns()}"
+                                                                            th:if="${field1.getRelationType().name == 'NON_RELATIONSHIP'} and ${i.count le 6}">
+                                                                        <th>
+                                                                            <span th:text="${field1.getDisplayName()}"></span>
+                                                                        </th>
+                                                                    </th:block>
+
+                                                                    </thead>
+                                                                    <input type="hidden" id="scriptData"
+                                                                           th:value="${scriptData}"/>
+
+                                                                    <tbody th:id="'searchResults-' + ${@adminBoardFactory.getEntity(field.getType()).getName()}">
+                                                                    </tbody>
+
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </th:block>
+                                                    <th:block
+                                                            th:if="${field.getRelationType().name() == 'NON_RELATIONSHIP'}">
+                                                        <input type="text" class="form-control" disabled=""
+                                                               placeholder="Company"
+                                                               th:value="${@adminBoardFactory.getFieldMappingValue(object, field.getName())}"
+                                                               style="margin-bottom: 10px">
+                                                    </th:block>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-info btn-fill pull-right">Update</button>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="container-fluid">
+                <nav>
+                    <ul class="footer-menu">
+                        <li>
+                            <a href="#">
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Company
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Portfolio
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Blog
+                            </a>
+                        </li>
+                    </ul>
+                    <p class="copyright text-center">
+                        ©
+                        <script>
+                            document.write(new Date().getFullYear())
+                        </script>
+                        <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
+                    </p>
+                </nav>
+            </div>
+        </footer>
+    </div>
+</div>
+</body>
+<script th:inline="javascript">
+    let scriptData;
+    let entityName;
+    $(document).ready(function () {
+        $('.api button').click(function () {
+            entityName = $(this).attr('id');
+            var keyword = $('input[id^="searchKeyword-' + entityName + '"]').val();
+            var searchType = $('select[id^="searchType-' + entityName + '"]').val();
+            console.log("test");
+            $.ajax({
+                url: '/admin-board/action/' + entityName + '/search',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    keyword: keyword,
+                    searchType: searchType,
+                    pageIndex: 0,
+                    pageSize: 20
+                },
+                success: function (data) {
+                    scriptData = data.content;
+                    displaySearchResults(data);
+                },
+                error: function () {
+                    alert('검색 요청을 처리하는 도중 오류가 발생했습니다.');
+                }
+            });
+        });
+    });
+
+    function displaySearchResults(data) {
+        let searchResults = $('tbody[id^="searchResults-' + entityName + '"]');
+
+        searchResults.empty(); // Clear previous results
+        $.each(data.content, function (index, result) {
+            let row = '<tr>';
+
+            for (let i = 0; i < 6; i++) {
+                console.log("object", Object.values(result)[i])
+                if (Array.isArray(Object.values(result)[i]) === false && typeof Object.values(result)[i] !== 'undefined') {
+                    row += '<td>' + Object.values(result)[i] + '</td>';
+                }
+            }
+            row += '</tr>';
+            searchResults.append(row);
+        });
+
+        // Display pagination
+        var pagination = $('#pagination');
+        pagination.empty(); // Clear previous pagination
+
+        // Append pagination links
+        for (var i = 1; i <= data.totalPages; i++) {
+            var pageLink = '<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>';
+            pagination.append(pageLink);
+        }
+    }
+
+</script>
+<!--   Core JS Files   -->
+<script src="/adminboard-resources/assets/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="/adminboard-resources/assets/js/core/popper.min.js" type="text/javascript"></script>
+<script src="/adminboard-resources/assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+<!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+<script src="/adminboard-resources/assets/js/plugins/bootstrap-switch.js"></script>
+<!--  Google Maps Plugin    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<!--  Chartist Plugin  -->
+<script src="/adminboard-resources/assets/js/plugins/chartist.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="/adminboard-resources/assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Light Bootstrap Dashboard: scripts for the example pages etc -->
+<script src="/adminboard-resources/assets/js/light-bootstrap-dashboard.js?v=2.0.0 " type="text/javascript"></script>
+<!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
+<script src="/adminboard-resources/assets/js/demo.js"></script>
+
+</html>
