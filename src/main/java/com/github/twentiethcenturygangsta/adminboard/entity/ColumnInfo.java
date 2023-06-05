@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 @Getter
 public class ColumnInfo {
@@ -31,7 +33,7 @@ public class ColumnInfo {
     public ColumnInfo(Field field) {
         this.name = field.getName();
         this.displayName = getFieldDisplayName(field);
-        this.type = field.getType().getSimpleName();
+        this.type = getFieldType(field);
         this.relationType = getFieldRelationType(field);
         this.maxSize = getFieldMaxSize(field);
         this.isId = field.isAnnotationPresent(Id.class);
@@ -47,6 +49,28 @@ public class ColumnInfo {
 
     public String getDescription() {
         return description;
+    }
+
+    private String getFieldType(Field field) {
+        if (field.isAnnotationPresent(OneToMany.class) || field.isAnnotationPresent(ManyToMany.class)) {
+            return getListItemType(field);
+        }
+        return field.getType().getSimpleName();
+    }
+
+    private String getListItemType(Field field) {
+        Type genericType = field.getGenericType();
+        if (genericType instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) genericType;
+            Type[] typeArguments = parameterizedType.getActualTypeArguments();
+            if (typeArguments.length > 0) {
+                Type typeArgument = typeArguments[0];
+                if (typeArgument instanceof Class<?> classObject) {
+                    return classObject.getSimpleName();
+                }
+            }
+        }
+        return null;
     }
 
     private String getFieldDisplayName(Field field) {
