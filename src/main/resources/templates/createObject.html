@@ -105,79 +105,86 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <th:block th:each="field, i : ${entity.getColumns}">
-                                                    <label>
+                                                    <th:block th:if="${field.getIsId() == false}">
+                                                        <label>
                                                         <span th:text="${field.getDisplayName()}"
                                                               style="margin-right:10px"></span>
-                                                        <span th:text="${field.getDescription()}"
-                                                              style="color: rebeccapurple; font-size: 10px"></span>
-                                                    </label>
-                                                    <th:block
-                                                            th:if="${field.getRelationType().name() != 'NON_RELATIONSHIP'}">
-                                                        <div class="api">
-                                                            <div class="row">
-                                                                <div class="col-md-2">
-                                                                    <select th:id="'searchType-' + ${@adminBoardFactory.getEntity(field.getType()).getName()}"
-                                                                            class="form-select form-select-sm form-group"
-                                                                            aria-label=".form-select-sm example">
-                                                                        <th:block
-                                                                                th:each="value, i: ${@adminBoardFactory.getEntity(field.getType()).getColumns()}">
+                                                            <span th:text="${field.getDescription()}"
+                                                                  style="color: rebeccapurple; font-size: 10px"></span>
+                                                        </label>
+                                                        <th:block
+                                                                th:if="${field.getRelationType().name() != 'NON_RELATIONSHIP'}">
+                                                            <div class="api">
+                                                                <div class="row">
+                                                                    <div class="col-md-2">
+                                                                        <select th:id="'searchType-' + ${@adminBoardFactory.getEntity(field.getType()).getName()}"
+                                                                                class="form-select form-select-md form-group"
+                                                                                aria-label=".form-select-md example">
                                                                             <th:block
-                                                                                    th:if="${value.getRelationType().name() == 'NON_RELATIONSHIP' && value.getIsId() == false}">
-                                                                                <option th:value="${value.getName()}"
-                                                                                        th:text="${value.getDisplayName()}"></option>
+                                                                                    th:each="value, i: ${@adminBoardFactory.getEntity(field.getType()).getColumns()}">
+                                                                                <th:block
+                                                                                        th:if="${value.getRelationType().name() == 'NON_RELATIONSHIP' && value.getIsId() == false}">
+                                                                                    <option th:value="${value.getName()}"
+                                                                                            th:text="${value.getDisplayName()}"></option>
+                                                                                </th:block>
                                                                             </th:block>
+                                                                            <!-- 필요한 검색 조건을 추가할 수 있습니다 -->
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-md-9">
+                                                                        <input type="text" class="form-control"
+                                                                               placeholder="value"
+                                                                               th:id="'searchKeyword-' + ${@adminBoardFactory.getEntity(field.getType()).getName()}"
+                                                                               value="" name="keyword" id="keyword">
+                                                                    </div>
+                                                                    <div class="col-md-1">
+                                                                        <button th:id="${@adminBoardFactory.getEntity(field.getType()).getName()}"
+                                                                                class="btn btn-info btn-fill pull-right">
+                                                                            SEARCH
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12"
+                                                                 style="height: 500px; overflow: scroll">
+                                                                <div class="card-body table-full-width table-responsive">
+                                                                    <table class="pagination-results table table-hover table-striped">
+                                                                        <thead id="searchResultsHeader">
+                                                                        <th></th>
+                                                                        <th:block
+                                                                                th:each="field1, i : ${@adminBoardFactory.getEntity(field.getType()).getColumns()}"
+                                                                                th:if="${field1.getRelationType().name == 'NON_RELATIONSHIP'} and ${i.count le 6}">
+                                                                            <th>
+                                                                                <span th:text="${field1.getDisplayName()}"></span>
+                                                                            </th>
                                                                         </th:block>
-                                                                        <!-- 필요한 검색 조건을 추가할 수 있습니다 -->
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-8">
-                                                                    <input type="text" class="form-control"
-                                                                           placeholder="value"
-                                                                           th:id="'searchKeyword-' + ${@adminBoardFactory.getEntity(field.getType()).getName()}"
-                                                                           value="" name="keyword" id="keyword">
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <button th:id="${@adminBoardFactory.getEntity(field.getType()).getName()}">
-                                                                        SEARCH
-                                                                    </button>
+
+                                                                        </thead>
+                                                                        <input type="hidden" id="scriptData"
+                                                                               th:value="${scriptData}"/>
+
+                                                                        <tbody th:id="'searchResults-' + ${@adminBoardFactory.getEntity(field.getType()).getName()}">
+                                                                        </tbody>
+
+                                                                    </table>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-12" style="height: 500px; overflow: scroll">
-                                                            <div class="card-body table-full-width table-responsive">
-                                                                <table class="pagination-results table table-hover table-striped">
-                                                                    <thead id="searchResultsHeader">
-                                                                    <th:block
-                                                                            th:each="field1, i : ${@adminBoardFactory.getEntity(field.getType()).getColumns()}"
-                                                                            th:if="${field1.getRelationType().name == 'NON_RELATIONSHIP'} and ${i.count le 6}">
-                                                                        <th>
-                                                                            <span th:text="${field1.getDisplayName()}"></span>
-                                                                        </th>
-                                                                    </th:block>
-
-                                                                    </thead>
-                                                                    <input type="hidden" id="scriptData"
-                                                                           th:value="${scriptData}"/>
-
-                                                                    <tbody th:id="'searchResults-' + ${@adminBoardFactory.getEntity(field.getType()).getName()}">
-                                                                    </tbody>
-
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </th:block>
-                                                    <th:block
-                                                            th:if="${field.getRelationType().name() == 'NON_RELATIONSHIP'}">
-                                                        <input type="text" class="form-control" disabled=""
-                                                               placeholder="Company"
-                                                               th:value="${@adminBoardFactory.getFieldMappingValue(object, field.getName())}"
-                                                               style="margin-bottom: 10px">
+                                                        </th:block>
+                                                        <th:block
+                                                                th:if="${field.getRelationType().name() == 'NON_RELATIONSHIP'}">
+                                                            <input type="text" class="form-control inputValue"
+                                                                   placeholder="value"
+                                                                   th:name="${field.getName()}"
+                                                                   style="margin-bottom: 10px">
+                                                        </th:block>
                                                     </th:block>
                                                 </th:block>
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-info btn-fill pull-right">Update</button>
+                                    <button type="submit" class="btn btn-info btn-fill pull-right" id="createButton">
+                                        Create
+                                    </button>
                                     <div class="clearfix"></div>
                                 </div>
                             </div>
@@ -253,6 +260,16 @@
             });
         });
     });
+    $(document).ready(function () {
+        let data = {}
+        $('#createButton').click(function () {
+            let values = $('input.inputValue').map(function () {
+                let name = $(this).attr('name');
+                data[name] = $(this).val();
+            }).get();
+            console.log("values ", data);
+        });
+    })
 
     function displaySearchResults(data) {
         let searchResults = $('tbody[id^="searchResults-' + entityName + '"]');
@@ -260,9 +277,8 @@
         searchResults.empty(); // Clear previous results
         $.each(data.content, function (index, result) {
             let row = '<tr>';
-
+            row += '<td> <div className="form-check"> <label className="form-check-label"> <input className="form-check-input" type="checkbox" value=""> <span className="form-check-sign"></span> </label> </div> </td>'
             for (let i = 0; i < 6; i++) {
-                console.log("object", Object.values(result)[i])
                 if (Array.isArray(Object.values(result)[i]) === false && typeof Object.values(result)[i] !== 'undefined') {
                     row += '<td>' + Object.values(result)[i] + '</td>';
                 }
