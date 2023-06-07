@@ -16,7 +16,7 @@ public class RepositoryInfo {
     private final Object repositoryObject;
     private final Object idType;
     private final String domainName;
-    private final Object domain;
+    private final Class<?> domain;
 
     @Builder
     public RepositoryInfo(List<Class<?>> repositoryInterfaces, Object repositoryObject, DefaultRepositoryMetadata metaData) {
