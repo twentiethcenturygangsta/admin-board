@@ -138,6 +138,15 @@ public class AdminBoardViewController {
         return "tasks";
     }
 
+    @GetMapping("/{entityName}/object")
+    public String createObjectView(Model model, @PathVariable("entityName") String entityName) {
+        getSideBarModel(model);
+        model.addAttribute("entity", adminBoardFactory.getEntity(entityName));
+        model.addAttribute("entityName", entityName);
+        model.addAttribute("entities", adminBoardFactory.getEntities());
+        return "createObject";
+    }
+
     private void getSideBarModel(Model model) {
         model.addAttribute("adminBoardInformation", adminBoardFactory.getAdminBoardInfo());
         model.addAttribute("entitiesByGroup", adminBoardFactory.getEntitiesByGroup());
