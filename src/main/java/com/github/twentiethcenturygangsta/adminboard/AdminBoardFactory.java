@@ -1,8 +1,10 @@
 package com.github.twentiethcenturygangsta.adminboard;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.twentiethcenturygangsta.adminboard.client.AdminBoardClient;
 import com.github.twentiethcenturygangsta.adminboard.client.AdminBoardInfo;
 import com.github.twentiethcenturygangsta.adminboard.client.EntityClient;
+import com.github.twentiethcenturygangsta.adminboard.entity.ColumnInfo;
 import com.github.twentiethcenturygangsta.adminboard.entity.EntityInfo;
 import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryBuilder;
 import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryClient;
@@ -24,12 +26,14 @@ public class AdminBoardFactory {
     private final RepositoryClient repositoryClient;
     private final EntityClient entityClient;
     private final AdminBoardClient adminBoardClient;
+    private final ObjectMapper objectMapper;
 
 
-    public AdminBoardFactory(final RepositoryClient repositoryClient, final AdminBoardClient adminBoardClient, final EntityClient entityClient) {
+    public AdminBoardFactory(final RepositoryClient repositoryClient, final AdminBoardClient adminBoardClient, final EntityClient entityClient, final ObjectMapper objectMapper) {
         this.repositoryClient = repositoryClient;
         this.entityClient = entityClient;
         this.adminBoardClient = adminBoardClient;
+        this.objectMapper = objectMapper;
     }
 
     public HashMap<String, ArrayList<EntityInfo>> getEntitiesByGroup() {
@@ -66,9 +70,43 @@ public class AdminBoardFactory {
         return adminBoardInfoTable;
     }
 
-//    public Object createObject(String entityName) {
-//
-//    }
+    public Object createObject(String entityName, HashMap<String, Object> data) {
+        ObjectMapper mapper = new ObjectMapper();
+        List<EntityInfo> entityInfos = entityClient.getEntities();
+
+        Map<String, Object> object = new HashMap<>();
+        for(Map.Entry<String, Object> value : data.entrySet()) {
+            String fieldName = value.getKey();
+            Object fieldValue = value.getValue();
+            if (entityInfos.stream().anyMatch(entityInfo -> fieldName.equals(entityInfo.getName()))) {
+                String newKey = "";
+                EntityInfo entityInfo = entityClient.getEntity(entityName);
+                RepositoryInfo mappedRepositoryInfo = repositoryClient.getRepository(fieldName);
+                Object mappedRepositoryObject = mappedRepositoryInfo.getRepositoryObject();
+                RepositoryBuilder<Object, Object> mappedRepositoryObjectBuilder = RepositoryBuilder.forObject(mappedRepositoryObject, mappedRepositoryInfo.getDomain(), mappedRepositoryInfo.getIdType());
+                CrudRepository<Object, Object> mappedRepository = mappedRepositoryObjectBuilder.build(CrudRepository.class);
+                Optional<Object> instance = mappedRepository.findById(fieldValue);
+                for(ColumnInfo columnInfo: entityInfo.getColumns()) {
+                    if(columnInfo.getType().equals(fieldName)) {
+                        newKey = columnInfo.getName();
+                    }
+                }
+                if(instance.isPresent()) {
+                    object.put(newKey, instance.get());
+                }
+            } else {
+                object.put(fieldName, fieldValue);
+            }
+        }
+
+        RepositoryInfo repositoryInfo = repositoryClient.getRepository(entityName);
+        Object repositoryObject = repositoryInfo.getRepositoryObject();
+        Class<?> entityClass = repositoryInfo.getDomain();
+        RepositoryBuilder<Object, Object> repositoryBuilder = RepositoryBuilder.forObject(repositoryObject, repositoryInfo.getDomain(), repositoryInfo.getIdType());
+        CrudRepository<Object, Object> repository = repositoryBuilder.build(CrudRepository.class);
+        Object instance = mapper.convertValue(object, entityClass);
+        return repository.save(instance);
+    }
 
     public Page<?> getObjects(String entityName, Pageable pageable) {
         RepositoryInfo repositoryInfo = repositoryClient.getRepository(entityName);
@@ -88,7 +126,6 @@ public class AdminBoardFactory {
         Iterable<?> allEntities = repository.findAll(sort);
         List<T> filteredEntities = new ArrayList<>();
         for (Object entity : allEntities) {
-            // 검색 조건을 수동으로 확인하여 필터링
             if (containsIgnoreCase(getEntityValue(entity, searchType), keyword)) {
                 filteredEntities.add((T) entity);
             }
