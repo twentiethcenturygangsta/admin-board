@@ -1,5 +1,6 @@
 package com.github.twentiethcenturygangsta.adminboard;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.twentiethcenturygangsta.adminboard.client.AdminBoardClient;
 import com.github.twentiethcenturygangsta.adminboard.client.EntityClient;
 import com.github.twentiethcenturygangsta.adminboard.repository.AdminBoardUserRepository;
@@ -38,8 +39,13 @@ public class AdminBoardAutoConfiguration {
     }
 
     @Bean
-    public AdminBoardFactory adminBoardFactory(RepositoryClient repositoryClient,  AdminBoardClient adminBoardClient, EntityClient entityClient) {
-        return new AdminBoardFactory(repositoryClient, adminBoardClient, entityClient);
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+
+    @Bean
+    public AdminBoardFactory adminBoardFactory(RepositoryClient repositoryClient, AdminBoardClient adminBoardClient, EntityClient entityClient, ObjectMapper objectMapper) {
+        return new AdminBoardFactory(repositoryClient, adminBoardClient, entityClient, objectMapper);
     }
 
     @Bean
@@ -48,8 +54,8 @@ public class AdminBoardAutoConfiguration {
     }
 
     @Bean
-    public AdminBoardViewActionController adminBoardViewActionController(AdminBoardServiceFactory adminBoardServiceFactory, AdminBoardLoginService adminBoardLoginService) {
-        return new AdminBoardViewActionController(adminBoardServiceFactory, adminBoardLoginService);
+    public AdminBoardViewActionController adminBoardViewActionController(AdminBoardServiceFactory adminBoardServiceFactory, AdminBoardLoginService adminBoardLoginService, AdminBoardFactory adminBoardFactory) {
+        return new AdminBoardViewActionController(adminBoardServiceFactory, adminBoardLoginService, adminBoardFactory);
     }
 
     @Bean
@@ -69,8 +75,8 @@ public class AdminBoardAutoConfiguration {
         return new MvcConfiguration();
     }
 
-    @Bean
-    public AdminBoardWebConfig adminBoardWebConfig() {
-        return new AdminBoardWebConfig();
-    }
+//    @Bean
+//    public AdminBoardWebConfig adminBoardWebConfig() {
+//        return new AdminBoardWebConfig();
+//    }
 }
