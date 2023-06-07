@@ -113,7 +113,7 @@
                                                                   style="color: rebeccapurple; font-size: 10px"></span>
                                                         </label>
                                                         <th:block
-                                                                th:if="${field.getRelationType().name() != 'NON_RELATIONSHIP'}">
+                                                                th:if="${field.getRelationType().name() == 'MANY_TO_ONE'}">
                                                             <div class="api">
                                                                 <div class="row">
                                                                     <div class="col-md-2">
@@ -234,6 +234,8 @@
 <script th:inline="javascript">
     let scriptData;
     let entityName;
+    let checkedData = [];
+
     $(document).ready(function () {
         $('.api button').click(function () {
             entityName = $(this).attr('id');
@@ -260,16 +262,6 @@
             });
         });
     });
-    $(document).ready(function () {
-        let data = {}
-        $('#createButton').click(function () {
-            let values = $('input.inputValue').map(function () {
-                let name = $(this).attr('name');
-                data[name] = $(this).val();
-            }).get();
-            console.log("values ", data);
-        });
-    })
 
     function displaySearchResults(data) {
         let searchResults = $('tbody[id^="searchResults-' + entityName + '"]');
@@ -277,7 +269,7 @@
         searchResults.empty(); // Clear previous results
         $.each(data.content, function (index, result) {
             let row = '<tr>';
-            row += '<td> <div className="form-check"> <label className="form-check-label"> <input className="form-check-input" type="checkbox" value=""> <span className="form-check-sign"></span> </label> </div> </td>'
+            row += '<td> <div className="form-check"> <label className="form-check-label"> <input className="form-check-input inputValue" class="'+ entityName + '" name="'+ entityName + '" type="checkbox" value=""> <span className="form-check-sign"></span> </label> </div> </td>'
             for (let i = 0; i < 6; i++) {
                 if (Array.isArray(Object.values(result)[i]) === false && typeof Object.values(result)[i] !== 'undefined') {
                     row += '<td>' + Object.values(result)[i] + '</td>';
@@ -286,6 +278,64 @@
             row += '</tr>';
             searchResults.append(row);
         });
+        searchResults.on('change', 'input.'+ entityName, function () {
+            // 체크 여부 확인
+            let isChecked = $(this).is(':checked');
+
+            // 체크된 데이터의 값을 가져올 수 있는 방법에 따라 처리
+            // 예시: 해당 행의 데이터를 가져와서 checkedData 배열에 추가
+            if (isChecked) {
+                let rowData = $(this).closest('tr').find('td').map(function () {
+                    return $(this).text();
+                }).get();
+                checkedData.push(rowData);
+            } else {
+                let rowData = $(this).closest('tr').find('td').map(function () {
+                    return $(this).text();
+                }).get();
+                let index = checkedData.findIndex(function (data) {
+                    return JSON.stringify(data) === JSON.stringify(rowData);
+                });
+                if (index > -1) {
+                    checkedData.splice(index, 1);
+                }
+            }
+            console.log('Checked Data:', checkedData);
+        });
+
+        $(document).ready(function () {
+            let data = {}
+            let entity = /*[[${entityName}]]*/ '';
+
+
+            $('#createButton').click(function () {
+                console.log("createButton : ", checkedData);
+                data[entityName] = checkedData[0][1];
+                console.log(data)
+                let values = $('input.inputValue').map(function () {
+                    let name = $(this).attr('name');
+                    data[name] = $(this).val();
+                }).get();
+                console.log("values ", data);
+
+                $.ajax({
+                    url: '/admin-board/action/' + entity + '/object',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        // 요청 성공 시 처리할 로직
+                        console.log("POST 요청 성공");
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // 요청 실패 시 처리할 로직
+                        console.log("POST 요청 실패");
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+        })
 
         // Display pagination
         var pagination = $('#pagination');
