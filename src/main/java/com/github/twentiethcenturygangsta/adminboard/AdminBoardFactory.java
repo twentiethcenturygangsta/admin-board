@@ -36,17 +36,15 @@ public class AdminBoardFactory {
         this.objectMapper = objectMapper;
     }
 
-    public HashMap<String, ArrayList<EntityInfo>> getEntitiesByGroup() {
-        HashMap<String, ArrayList<EntityInfo>> entitiesByGroup = new HashMap<>();
+    public Map<String, List<EntityInfo>> getGroupEntities() {
+        Map<String, List<EntityInfo>> entitiesByGroup = new HashMap<>();
+        List<EntityInfo> entityInfos = entityClient.getEntities();
 
-        for (EntityInfo entityInfo : entityClient.getEntities()) {
-            if (entitiesByGroup.containsKey(entityInfo.getGroup())) {
-                ArrayList<EntityInfo> entityInfos = entitiesByGroup.get(entityInfo.getGroup());
-                entityInfos.add(entityInfo);
-                entitiesByGroup.put(entityInfo.getGroup(), entityInfos);
-            } else {
-                entitiesByGroup.put(entityInfo.getGroup(), new ArrayList<>(List.of(entityInfo)));
-            }
+        for (EntityInfo entityInfo : entityInfos) {
+            String group = entityInfo.getGroup();
+            List<EntityInfo> groupEntities = entitiesByGroup.getOrDefault(group, new ArrayList<>());
+            groupEntities.add(entityInfo);
+            entitiesByGroup.put(group, groupEntities);
         }
         return entitiesByGroup;
     }

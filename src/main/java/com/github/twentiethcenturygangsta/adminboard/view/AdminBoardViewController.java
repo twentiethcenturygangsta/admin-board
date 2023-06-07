@@ -37,7 +37,7 @@ public class AdminBoardViewController {
     @GetMapping("/home")
     public String HomeView(Model model) {
         log.info("entities = {}", adminBoardFactory.getEntities());
-        log.info("data = {}", adminBoardFactory.getEntitiesByGroup());
+        log.info("data = {}", adminBoardFactory.getGroupEntities());
         return "home";
     }
 
@@ -149,7 +149,7 @@ public class AdminBoardViewController {
 
     private void getSideBarModel(Model model) {
         model.addAttribute("adminBoardInformation", adminBoardFactory.getAdminBoardInfo());
-        model.addAttribute("entitiesByGroup", adminBoardFactory.getEntitiesByGroup());
+        model.addAttribute("entitiesByGroup", adminBoardFactory.getGroupEntities());
         model.addAttribute("entities", adminBoardFactory.getEntities());
     }
 }
