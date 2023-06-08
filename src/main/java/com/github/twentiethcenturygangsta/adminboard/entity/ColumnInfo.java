@@ -21,6 +21,7 @@ public class ColumnInfo {
     private final String name;
     private final String displayName;
     private final String type;
+    private final Class<?> typeClass;
     private final DatabaseRelationType relationType;
     private final int maxSize;
     private final boolean isId;
@@ -34,6 +35,7 @@ public class ColumnInfo {
         this.name = field.getName();
         this.displayName = getFieldDisplayName(field);
         this.type = getFieldType(field);
+        this.typeClass = getFieldTypeClass(field);
         this.relationType = getFieldRelationType(field);
         this.maxSize = getFieldMaxSize(field);
         this.isId = field.isAnnotationPresent(Id.class);
@@ -53,12 +55,19 @@ public class ColumnInfo {
 
     private String getFieldType(Field field) {
         if (field.isAnnotationPresent(OneToMany.class) || field.isAnnotationPresent(ManyToMany.class)) {
-            return getListItemType(field);
+            return getListItemType(field).getSimpleName();
         }
         return field.getType().getSimpleName();
     }
 
-    private String getListItemType(Field field) {
+    private Class<?> getFieldTypeClass(Field field) {
+        if (field.isAnnotationPresent(OneToMany.class) || field.isAnnotationPresent(ManyToMany.class)) {
+            return getListItemType(field);
+        }
+        return field.getType();
+    }
+
+    private Class<?> getListItemType(Field field) {
         Type genericType = field.getGenericType();
         if (genericType instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) genericType;
@@ -66,7 +75,7 @@ public class ColumnInfo {
             if (typeArguments.length > 0) {
                 Type typeArgument = typeArguments[0];
                 if (typeArgument instanceof Class<?> classObject) {
-                    return classObject.getSimpleName();
+                    return classObject;
                 }
             }
         }
