@@ -172,10 +172,57 @@
                                                         </th:block>
                                                         <th:block
                                                                 th:if="${field.getRelationType().name() == 'NON_RELATIONSHIP'}">
-                                                            <input type="text" class="form-control inputValue"
-                                                                   placeholder="value"
-                                                                   th:name="${field.getName()}"
-                                                                   style="margin-bottom: 10px">
+                                                            <th:block
+                                                                    th:if="${field.getType() == 'String' || field.getType() == 'int' || field.getType() == 'Integer' || field.getType() == 'Long'}">
+                                                                <input type="text" class="form-control inputValue"
+                                                                       placeholder="value"
+                                                                       th:name="${field.getName()}"
+                                                                       style="margin-bottom: 10px">
+                                                            </th:block>
+                                                            <th:block th:if="${field.getType() == 'LocalDateTime'}">
+                                                            </th:block>
+                                                            <th:block
+                                                                    th:if="${
+                                                                    field.getType() != 'LocalDateTime' and
+                                                                    field.getType() != 'String' and
+                                                                    field.getType() != 'int' and
+                                                                    field.getType() != 'Integer'and
+                                                                    field.getType() != 'bool'and
+                                                                    field.getType() != 'Boolean' and
+                                                                    field.getType() != 'Long'
+                                                                    }">
+                                                                <select class="form-select inputValue"
+                                                                        aria-label="Default select example"
+                                                                        th:name="${field.getName()}"
+                                                                >
+                                                                    <th:block
+                                                                            th:each="enum : ${enums}">
+                                                                        <th:block th:if="${enum.key == field.getType()}">
+                                                                            <th:block th:each="enumValue: ${enum.value}">
+                                                                            <option th:value="${enumValue}"
+                                                                                    th:text="${enumValue}"></option>
+                                                                            </th:block>
+                                                                        </th:block>
+
+
+                                                                        <!--                                                                    <option selected>Open this select menu</option>-->
+                                                                        <!--                                                                    <option value="1">One</option>-->
+                                                                        <!--                                                                    <option value="2">Two</option>-->
+                                                                        <!--                                                                    <option value="3">Three</option>-->
+                                                                    </th:block>
+                                                                </select>
+                                                            </th:block>
+                                                            <th:block
+                                                                    th:if="${field.getType() == 'Boolean' or field.getType() == 'bool'}">
+                                                                <select class="form-select inputValue"
+                                                                        aria-label="Default select example"
+                                                                        th:name="${field.getName()}"
+                                                                >
+                                                                    <option selected th:value="true" th:text="true">True</option>
+                                                                    <option th:value="false" th:text="false">True</option>
+
+                                                                </select>
+                                                            </th:block>
                                                         </th:block>
                                                     </th:block>
                                                 </th:block>
@@ -269,7 +316,7 @@
         searchResults.empty(); // Clear previous results
         $.each(data.content, function (index, result) {
             let row = '<tr>';
-            row += '<td> <div className="form-check"> <label className="form-check-label"> <input className="form-check-input inputValue" class="'+ entityName + '" name="'+ entityName + '" type="checkbox" value=""> <span className="form-check-sign"></span> </label> </div> </td>'
+            row += '<td> <div className="form-check"> <label className="form-check-label"> <input className="form-check-input inputValue" class="' + entityName + '" name="' + entityName + '" type="checkbox" value=""> <span className="form-check-sign"></span> </label> </div> </td>'
             for (let i = 0; i < 6; i++) {
                 if (Array.isArray(Object.values(result)[i]) === false && typeof Object.values(result)[i] !== 'undefined') {
                     row += '<td>' + Object.values(result)[i] + '</td>';
@@ -278,7 +325,7 @@
             row += '</tr>';
             searchResults.append(row);
         });
-        searchResults.on('change', 'input.'+ entityName, function () {
+        searchResults.on('change', 'input.' + entityName, function () {
             // 체크 여부 확인
             let isChecked = $(this).is(':checked');
 
@@ -312,7 +359,7 @@
                 console.log("createButton : ", checkedData);
                 data[entityName] = checkedData[0][1];
                 console.log(data)
-                let values = $('input.inputValue').map(function () {
+                let values = $('.inputValue').map(function () {
                     let name = $(this).attr('name');
                     data[name] = $(this).val();
                 }).get();
