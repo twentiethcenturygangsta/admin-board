@@ -157,17 +157,45 @@
                             </div>
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination justify-content-center">
-                                    <li class="page-item disabled">
-                                        <a class="page-link">Previous</a>
+                                    <li class="page-item" th:class="${data.first} ? 'page-item' : 'page-item'">
+                                        <a class="page-link" th:if="${data.hasPrevious}"
+                                           th:href="@{/admin-board/{entityName}(entityName=${entityName},page=0,size=${data.size},sort=${data.sort})}"><<</a>
                                     </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">Next</a>
+                                    <li class="page-item" th:class="${!data.hasPrevious} ? 'page-item disabled' : 'page-item'">
+                                        <a class="page-link" th:if="${data.hasPrevious}"
+                                           th:href="@{/admin-board/{entityName}(entityName=${entityName},page=${data.number-1},size=${data.size},sort=${data.sort})}"><</a>
+                                    </li>
+                                    <li class="page-item" th:each="pageNumber : ${#numbers.sequence(data.number - (data.number % 10), data.number - (data.number % 10) + 9)}"
+                                        th:class="${data.number == pageNumber} ? 'page-item active' : 'page-item'">
+                                        <a class="page-link" th:href="@{/admin-board/{entityName}(entityName=${entityName},page=${pageNumber},size=${data.size},sort=${data.sort})}"
+                                           th:text="${pageNumber+1}"></a>
+                                    </li>
+                                    <a class="page-link" th:if="${data.hasNext}"
+                                       th:href="@{/admin-board/{entityName}(entityName=${entityName},page=${data.number+1},size=${data.size},sort=${data.sort})}">></a>
+                                    </li>
+                                    <li class="page-item" th:class="${data.last} ? 'page-item' : 'page-item'">
+                                        <a class="page-link" th:if="${data.hasNext}"
+                                           th:href="@{/admin-board/{entityName}(entityName=${entityName},page=${data.totalPages-1},size=${data.size},sort=${data.sort})}">>></a>
                                     </li>
                                 </ul>
                             </nav>
+
+
+
+
+                            <!--                            <nav aria-label="Page navigation example">-->
+                            <!--                                <ul class="pagination justify-content-center">-->
+                            <!--                                    <li class="page-item disabled">-->
+                            <!--                                        <a class="page-link">Previous</a>-->
+                            <!--                                    </li>-->
+                            <!--                                    <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+                            <!--                                    <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+                            <!--                                    <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+                            <!--                                    <li class="page-item">-->
+                            <!--                                        <a class="page-link" href="#">Next</a>-->
+                            <!--                                    </li>-->
+                            <!--                                </ul>-->
+                            <!--                            </nav>-->
                         </div>
                     </div>
                 </div>
