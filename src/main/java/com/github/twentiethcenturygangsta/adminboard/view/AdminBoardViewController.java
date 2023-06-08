@@ -144,6 +144,7 @@ public class AdminBoardViewController {
         model.addAttribute("entity", adminBoardFactory.getEntity(entityName));
         model.addAttribute("entityName", entityName);
         model.addAttribute("entities", adminBoardFactory.getEntities());
+        model.addAttribute("enums", adminBoardFactory.getEnumClass());
         return "createObject";
     }
 
