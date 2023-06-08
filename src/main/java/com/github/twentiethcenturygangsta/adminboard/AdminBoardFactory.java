@@ -57,6 +57,19 @@ public class AdminBoardFactory {
         return entityClient.getEntity(entityName);
     }
 
+    public Map<String, List<?>> getEnumClass() {
+        Map<String, List<?>> enums = new HashMap<>();
+        for(Map.Entry<String, Class<?>> enumClass : entityClient.getEnumClasses().entrySet()) {
+            String key = enumClass.getKey();
+            Class<?> value = enumClass.getValue();
+            Object[] enumValues = value.getEnumConstants();
+            if (enumValues != null) {
+                enums.put(key, Arrays.asList(enumValues));
+            }
+        }
+        return enums;
+    }
+
     public HashMap<String, String> getAdminBoardInfo() {
         HashMap<String, String> adminBoardInfoTable = new HashMap<>();
         AdminBoardInfo adminBoardInfo = adminBoardClient.getAdminBoardInfo();

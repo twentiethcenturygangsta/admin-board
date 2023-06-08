@@ -23,6 +23,7 @@ public class AdminBoardAutoConfiguration {
     public EntityClient entityClient() {
         EntityClient entityClient = new EntityClient();
         entityClient.registerEntities();
+        entityClient.registerEnumClasses();
         return entityClient;
     }
 
