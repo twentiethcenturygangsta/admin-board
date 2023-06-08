@@ -13,6 +13,7 @@ public class EntityClient {
 
     private List<EntityInfo> entities;
     private Set<Class<?>> entityClasses;
+    private Map<String, Class<?>> enumClasses = new HashMap<>();
 
     public void registerEntities() {
         List<EntityInfo> entities = new ArrayList<>();
@@ -30,8 +31,25 @@ public class EntityClient {
         this.entities = entities;
     }
 
+    public void registerEnumClasses() {
+        Map<String, Class<?>> enumClasses = new HashMap<>();
+        Set<Class<?>> classes = new HashSet<>();
+        List<String> basePackages = AdminBoardRegistrar.getBasePackages();
+        for (String basePackage : basePackages) {
+            classes.addAll(new Reflections(basePackage).getSubTypesOf(Enum.class));
+        }
+        for (Class<?> enumClass : classes) {
+            enumClasses.put(enumClass.getSimpleName(), enumClass);
+        }
+        this.enumClasses = enumClasses;
+    }
+
     public List<EntityInfo> getEntities() {
         return entities;
+    }
+
+    public Map<String, Class<?>> getEnumClasses() {
+        return enumClasses;
     }
     public Set<Class<?>> getEntityClasses() {
         return entityClasses;
