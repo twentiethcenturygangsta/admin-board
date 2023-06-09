@@ -105,7 +105,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <th:block th:each="field, i : ${entity.getColumns}">
-                                                    <th:block th:if="${field.getIsId() == false}">
+                                                    <th:block th:if="${field.getIsId() == false and field.getRelationType().name() !='ONE_TO_MANY'}">
                                                         <label>
                                                         <span th:text="${field.getDisplayName()}"
                                                               style="margin-right:10px"></span>
