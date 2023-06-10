@@ -95,7 +95,6 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card strpied-tabled-with-hover">
-
                             <div class="card-header ">
                                 <div class="row">
                                     <div class="col-md-8">
@@ -103,7 +102,12 @@
                                         <p class="card-category"><span th:text="${entity.getDescription()}"></span></p>
                                     </div>
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn btn-info btn-fill pull-right">Create</button>
+                                        <button type="submit" class="btn btn-info btn-fill pull-right">
+                                            <a style="display:block; text-overflow: ellipsis; overflow:hidden; width:100px; white-space: nowrap; word-break: break-all; color: white; text-decoration: none;"
+                                               th:text="CREATE"
+                                               th:href="@{/admin-board/{entityName}/object (entityName=${entityName})}"
+                                            ></a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -157,30 +161,32 @@
                             </div>
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination justify-content-center">
-                                    <li class="page-item" th:class="${data.first} ? 'page-item' : 'page-item'">
-                                        <a class="page-link" th:if="${data.hasPrevious}"
+                                    <li class="page-item" th:class="${data.first} ? 'page-item disabled' : 'page-item'">
+                                        <a class="page-link"
                                            th:href="@{/admin-board/{entityName}(entityName=${entityName},page=0,size=${data.size},sort=${data.sort})}"><<</a>
                                     </li>
-                                    <li class="page-item" th:class="${!data.hasPrevious} ? 'page-item disabled' : 'page-item'">
-                                        <a class="page-link" th:if="${data.hasPrevious}"
+                                    <li class="page-item"
+                                        th:class="${!data.hasPrevious} ? 'page-item disabled' : 'page-item'">
+                                        <a class="page-link"
                                            th:href="@{/admin-board/{entityName}(entityName=${entityName},page=${data.number-1},size=${data.size},sort=${data.sort})}"><</a>
                                     </li>
-                                    <li class="page-item" th:each="pageNumber : ${#numbers.sequence(data.number - (data.number % 10), data.number - (data.number % 10) + 9)}"
-                                        th:class="${data.number == pageNumber} ? 'page-item active' : 'page-item'">
+                                    <li class="page-item"
+                                        th:class="${data.number == pageNumber} ? 'page-item active' : 'page-item'"
+                                        th:each="pageNumber : ${#numbers.sequence(data.number - (data.number % data.size), (data.number - (data.number % data.size) + data.size - 1) < data.totalPages ? (data.number - (data.number % data.size) + data.size - 1) : data.totalPages-1)}">
                                         <a class="page-link" th:href="@{/admin-board/{entityName}(entityName=${entityName},page=${pageNumber},size=${data.size},sort=${data.sort})}"
                                            th:text="${pageNumber+1}"></a>
                                     </li>
-                                    <a class="page-link" th:if="${data.hasNext}"
+                                    <li th:class="${!data.hasNext} ? 'page-item disabled' : 'page-item'">
+                                    <a class="page-link"
+
                                        th:href="@{/admin-board/{entityName}(entityName=${entityName},page=${data.number+1},size=${data.size},sort=${data.sort})}">></a>
                                     </li>
-                                    <li class="page-item" th:class="${data.last} ? 'page-item' : 'page-item'">
-                                        <a class="page-link" th:if="${data.hasNext}"
+                                    <li class="page-item" th:class="${data.last} ? 'page-item disabled' : 'page-item'">
+                                        <a class="page-link"
                                            th:href="@{/admin-board/{entityName}(entityName=${entityName},page=${data.totalPages-1},size=${data.size},sort=${data.sort})}">>></a>
                                     </li>
                                 </ul>
                             </nav>
-
-
 
 
                             <!--                            <nav aria-label="Page navigation example">-->
