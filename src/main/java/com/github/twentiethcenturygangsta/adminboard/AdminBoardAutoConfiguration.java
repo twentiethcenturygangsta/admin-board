@@ -76,8 +76,8 @@ public class AdminBoardAutoConfiguration {
         return new MvcConfiguration();
     }
 
-//    @Bean
-//    public AdminBoardWebConfig adminBoardWebConfig() {
-//        return new AdminBoardWebConfig();
-//    }
+    @Bean
+    public AdminBoardWebConfig adminBoardWebConfig() {
+        return new AdminBoardWebConfig();
+    }
 }
