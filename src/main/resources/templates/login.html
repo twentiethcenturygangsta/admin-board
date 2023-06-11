@@ -10,7 +10,7 @@
 <body>
 <section class="login-form">
     <h1>ADMIN BOARD</h1>
-    <form th:action="@{/admin-board/action/login}" th:object="${login}" method="post">
+    <form th:action="@{/admin-board/login}" th:object="${login}" method="post">
         <div class="int-area">
             <input type="text" name="memberId" id="memberId" autocomplete="off" required>
             <label for="memberId">USER NAME</label>
