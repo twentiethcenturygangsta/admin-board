@@ -3,16 +3,17 @@ package com.github.twentiethcenturygangsta.adminboard.view;
 import com.github.twentiethcenturygangsta.adminboard.AdminBoardFactory;
 import com.github.twentiethcenturygangsta.adminboard.AdminBoardLoginService;
 import com.github.twentiethcenturygangsta.adminboard.AdminBoardServiceFactory;
+import com.github.twentiethcenturygangsta.adminboard.SessionConst;
+import com.github.twentiethcenturygangsta.adminboard.user.AdminBoardUser;
 import com.github.twentiethcenturygangsta.adminboard.user.LoginRequestDto;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -48,7 +49,7 @@ public class AdminBoardViewController {
         return "user";
     }
 
-    @GetMapping("/admin-user")
+    @GetMapping("/AdminBoardUser")
     public String AdminUserView(Model model, @PageableDefault Pageable pageable) {
         getSideBarModel(model);
         model.addAttribute("data", adminBoardServiceFactory.getAdminBoardUsers(pageable));
@@ -56,6 +57,19 @@ public class AdminBoardViewController {
         model.addAttribute("groupName", "AdminBoard");
         model.addAttribute("entityName", "AdminBoardUser");
         return "adminUser";
+    }
+
+    @PostMapping("/login")
+    public String Login (Model model, @ModelAttribute("login") LoginRequestDto loginRequestDto, HttpServletRequest request) {
+        Optional<AdminBoardUser> adminBoardUser = adminBoardLoginService.loginAdminBoardUser(loginRequestDto);
+        if(adminBoardUser.isPresent()) {
+            HttpSession session = request.getSession();
+            session.setAttribute(SessionConst.LOGIN_MEMBER, adminBoardUser);
+            return "redirect:/admin-board/AdminBoardUser";
+        } else{
+            model.addAttribute("error", "일치하는 대시보드 계정이 존재하지 않습니다.");
+            return "login";
+        }
     }
 
     @GetMapping("/{entityName}")

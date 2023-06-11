@@ -9,6 +9,7 @@ import com.github.twentiethcenturygangsta.adminboard.user.LoginRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,19 +28,6 @@ public class AdminBoardViewActionController {
         this.adminBoardServiceFactory = adminBoardServiceFactory;
         this.adminBoardLoginService = adminBoardLoginService;
         this.adminBoardFactory = adminBoardFactory;
-    }
-
-    @PostMapping("/login")
-    public String Login (Model model, @ModelAttribute("login") LoginRequestDto loginRequestDto, HttpServletRequest request) {
-        Optional<AdminBoardUser> adminBoardUser = adminBoardLoginService.loginAdminBoardUser(loginRequestDto);
-        if(adminBoardUser.isPresent()) {
-            HttpSession session = request.getSession();
-            session.setAttribute(SessionConst.LOGIN_MEMBER, adminBoardUser);
-            return "redirect:/admin-board/task";
-        } else{
-            model.addAttribute("error", "일치하는 대시보드 계정이 존재하지 않습니다.");
-            return "login";
-        }
     }
 
     @GetMapping("/{entityName}/search")
