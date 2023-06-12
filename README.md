@@ -184,3 +184,42 @@ public class Product implements Serializable {
     }
 }
 ```
+
+<br />
+<br />
+
+## Example Views
+### Login View
+Log in using the super admin account registered by the developer.
+![img.png](docs/images/login.png)
+
+<br />
+
+### Table View
+You can access lists of entity objects for each table, with the ability to view up to 10 objects per page. The table view supports the display of up to 6 columns, providing a comprehensive overview of the data.
+![img.png](docs/images/table.png)
+
+<br />
+
+### Create Views
+You can create objects by entering values that correspond to their types. When inserting objects with associated relationships, you can use search functionality to select the appropriate entities.
+#### Create view
+![img.png](docs/images/create.png)
+#### Create Search View
+![img.png](docs/images/createSearch.png)
+
+<br />
+
+### Object Detail View
+view the details of all fields for an object, providing comprehensive information about each field.
+![img.png](docs/images/detail.png)
+
+<br />
+
+### Admin User Views
+#### Admin User Create View
+create an admin user account with limited permissions.
+![img.png](docs/images/adminUserCreate.png)
+#### Admin User Table View
+You can access lists of entity objects for Admin User table, with the ability to view up to 10 objects per page. The table view supports the display of up to 6 columns, providing a comprehensive overview of the data.
+![img.png](docs/images/adminUserTable.png)
