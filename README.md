@@ -9,13 +9,46 @@
 There are two ways to use the library.
 One is using `mavenLocal` and the other is `using modules distributed with Jitpack`.
 
+### MavenLocal
+#### 1. Clone the Repository
+Clone the Admin Board repository to your local machine using the following command:
+```bash
+git clone https://github.com/twentiethcenturygangsta/admin-board.git
+```
+#### 2. build
+Navigate to the cloned directory and build the project by executing the following command:
+```bash
+./gradlew clean PublishToMavenLocal
+```
+This command will clean the project and publish the artifacts to your local Maven repository.
+
+After completing these steps, you can include the Admin Board library in your project by adding the appropriate dependency configuration in your project's pom.xml or build.gradle file.
+
+```build.gradle
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    
+    ...
+    
+    dependencies {
+        ...
+        implementation 'com.github.twentiethcenturygangsta:admin-board:{version}'
+    }
+```
+
+<br />
+
 ### Basic Step
 
 #### 1. Config
-Create `AdminBoardClient` bean
+Admin Board Configuration
+- Add a detailed explanation of how to create the AdminBoardClient bean.
+- Provide more detailed instructions on setting up UserCredentials and AdminBoardInfo.
 
-- UserCredentials : Settings for accounts that can use the dashboard.
-- AdminBoardInfo : You can enter basic information about the dashboard. Basic information is exposed on the dashboard screen.
+  - UserCredentials : Settings for accounts that can use the dashboard.
+  - AdminBoardInfo : You can enter basic information about the dashboard. Basic information is exposed on the dashboard screen.
 ```java
 @Configuration
 public class AdminBoardConfig {
@@ -32,6 +65,9 @@ public class AdminBoardConfig {
 <br />
 
 #### 2. EnableAdminBoard
+- Provide a more detailed explanation of how to enable Admin Board using the @EnableAdminBoard annotation.
+- Add specific examples for both single-module and multi-module projects.
+
 If it is a single module, just attach `@EnableAdminBoard` annotation.
 ```java
 @EnableAdminBoard
@@ -55,8 +91,10 @@ public class ApiApplication {
 ```
 <br />
 
-#### 3. AdminBoardEntity, AdminBoardColumn
-Entities with the @AdminBoardEntity annotation are exposed on the dashboard.
+#### 3. AdminBoardEntity and AdminBoardColumn
+- Explain how to add entities to the dashboard using the `@AdminBoardEntity` annotation.
+- Provide a more detailed explanation of using the `@AdminBoardColumn` annotation to describe the properties of each entity.
+- Supplement the explanation with the `Product` entity as an example.
 ```java
 @Entity
 @Getter
