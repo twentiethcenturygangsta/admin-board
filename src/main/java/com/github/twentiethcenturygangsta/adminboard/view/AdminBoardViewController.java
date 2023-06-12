@@ -73,9 +73,14 @@ public class AdminBoardViewController {
     }
 
     @GetMapping("/{entityName}")
-    public String EntityView(Model model, @PathVariable("entityName") String entityName, @PageableDefault Pageable pageable) {
+    public String EntityView(
+            Model model,
+            @PathVariable("entityName") String entityName,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "type", required = false) String type,
+            @PageableDefault Pageable pageable) {
         getSideBarModel(model);
-        model.addAttribute("data", adminBoardFactory.getObjects(entityName, pageable));
+        model.addAttribute("data", adminBoardFactory.getObjects(entityName, keyword, type, pageable));
         model.addAttribute("entity", adminBoardFactory.getEntity(entityName));
         model.addAttribute("entityName", entityName);
 
@@ -145,9 +150,13 @@ public class AdminBoardViewController {
     }
 
     @GetMapping("/task")
-    public String TaskView(Model model, @PageableDefault Pageable pageable) {
+    public String TaskView(
+            Model model,
+            @RequestParam("keyword") String keyword,
+            @RequestParam("type") String type,
+            @PageableDefault Pageable pageable) {
         getSideBarModel(model);
-        model.addAttribute("data", adminBoardFactory.getObjects("Task", pageable));
+        model.addAttribute("data", adminBoardFactory.getObjects("Task", keyword, type, pageable));
         model.addAttribute("entityName", "Task");
         return "tasks";
     }

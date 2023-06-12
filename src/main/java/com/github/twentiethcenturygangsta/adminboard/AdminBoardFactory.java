@@ -119,14 +119,16 @@ public class AdminBoardFactory {
         return repository.save(instance);
     }
 
-    public Page<?> getObjects(String entityName, Pageable pageable) {
+    public Page<?> getObjects(String entityName, String keyword, String type, Pageable pageable) {
         RepositoryInfo repositoryInfo = repositoryClient.getRepository(entityName);
         Object repositoryObject = repositoryInfo.getRepositoryObject();
+        if (keyword == null || type == null) {
+            RepositoryBuilder<?, ?> repositoryBuilder = RepositoryBuilder.forObject(repositoryObject, repositoryInfo.getDomain(), repositoryInfo.getIdType());
+            PagingAndSortingRepository<?, ?> repository = repositoryBuilder.build(PagingAndSortingRepository.class);
+            return repository.findAll(pageable);
+        }
+        return getSearchObjects(entityName, type, keyword, pageable.getPageNumber(), pageable.getPageSize());
 
-        RepositoryBuilder<?, ?> repositoryBuilder = RepositoryBuilder.forObject(repositoryObject, repositoryInfo.getDomain(), repositoryInfo.getIdType());
-
-        PagingAndSortingRepository<?, ?> repository = repositoryBuilder.build(PagingAndSortingRepository.class);
-        return repository.findAll(pageable);
     }
 
     public <T> Page<T> getSearchObjects(String entityName, String searchType, String keyword, int pageIndex, int pageSize) {
