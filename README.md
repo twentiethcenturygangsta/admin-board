@@ -1,13 +1,24 @@
 # Admin Board
-- Admin Board is a management page library implemented using the Spring Framework.   
-- With Our Board, you can perform CRUD operations (Create, Read, Update, Delete) on the information stored in the database.   
-- In addition, Our Board automatically recognizes information about database tables and generates management pages for those tables.
+Admin Board is a powerful management page library designed for the Spring Framework. It provides comprehensive features to facilitate CRUD operations (Create, Read, Update, Delete) on database records, offering seamless management of data stored in your application.
+
+## Key Features
+`Effortless CRUD Operations`: Admin Board simplifies the management of database records by providing a user-friendly interface for effortless CRUD operations. It allows you to effortlessly create, read, update, and delete data with minimal effort.
+
+`Automatic Table Recognition`: Admin Board automatically recognizes the structure of your database tables and generates corresponding management pages. This eliminates the need for manual configuration, saving you valuable development time.
+
+`Customizable Dashboard`: The library offers a highly customizable dashboard where you can showcase essential information about your application. You have complete control over the layout, appearance, and functionality of the dashboard to meet your specific requirements.
+
+`Secure Access Control`: Admin Board seamlessly integrates with Spring Security, enabling you to enforce access control and define user roles and permissions. This ensures that only authorized users can access and modify the management pages securely.
+
+`Extensible and Flexible`: Admin Board is designed to be highly extensible and flexible, allowing you to easily adapt it to the unique needs of your application. You can customize various aspects, including entity mappings, column configurations, and UI components, to tailor the library precisely to your requirements.
 
 <br />
 
 ## How To Use
 There are two ways to use the library.
 One is using `mavenLocal` and the other is `using modules distributed with Jitpack`.
+
+<br />
 
 ### MavenLocal
 #### 1. Clone the Repository
@@ -47,8 +58,8 @@ Admin Board Configuration
 - Add a detailed explanation of how to create the AdminBoardClient bean.
 - Provide more detailed instructions on setting up UserCredentials and AdminBoardInfo.
 
-  - UserCredentials : Settings for accounts that can use the dashboard.
-  - AdminBoardInfo : You can enter basic information about the dashboard. Basic information is exposed on the dashboard screen.
+  - `UserCredentials` : Settings for accounts that can use the dashboard.
+  - `AdminBoardInfo` : You can enter basic information about the dashboard. Basic information is exposed on the dashboard screen.
 ```java
 @Configuration
 public class AdminBoardConfig {
