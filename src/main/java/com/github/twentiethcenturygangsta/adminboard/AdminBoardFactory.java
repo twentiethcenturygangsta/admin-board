@@ -122,7 +122,7 @@ public class AdminBoardFactory {
     public Page<?> getObjects(String entityName, String keyword, String type, Pageable pageable) {
         RepositoryInfo repositoryInfo = repositoryClient.getRepository(entityName);
         Object repositoryObject = repositoryInfo.getRepositoryObject();
-        if (keyword == null || type == null) {
+        if ("ALL".equals(keyword) || "ALL".equals(type)) {
             RepositoryBuilder<?, ?> repositoryBuilder = RepositoryBuilder.forObject(repositoryObject, repositoryInfo.getDomain(), repositoryInfo.getIdType());
             PagingAndSortingRepository<?, ?> repository = repositoryBuilder.build(PagingAndSortingRepository.class);
             return repository.findAll(pageable);

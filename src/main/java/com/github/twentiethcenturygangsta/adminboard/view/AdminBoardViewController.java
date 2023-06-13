@@ -76,10 +76,20 @@ public class AdminBoardViewController {
     public String EntityView(
             Model model,
             @PathVariable("entityName") String entityName,
-            @RequestParam(value = "keyword", required = false) String keyword,
-            @RequestParam(value = "type", required = false) String type,
+//            @RequestParam(value = "keyword", required = false) String keyword,
+//            @RequestParam(value = "type", required = false) String type,
+            String keyword,
+            String type,
             @PageableDefault Pageable pageable) {
         getSideBarModel(model);
+
+        if ("ALL".equals(keyword) && "ALL".equals(type)) {
+            model.addAttribute("keyword", "ALL");
+            model.addAttribute("type", "ALL");
+        } else {
+            model.addAttribute("keyword", keyword);
+            model.addAttribute("type", type);
+        }
         model.addAttribute("data", adminBoardFactory.getObjects(entityName, keyword, type, pageable));
         model.addAttribute("entity", adminBoardFactory.getEntity(entityName));
         model.addAttribute("entityName", entityName);

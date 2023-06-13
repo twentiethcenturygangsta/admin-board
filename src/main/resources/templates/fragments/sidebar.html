@@ -32,7 +32,7 @@
                     </div>
                     <th:block th:each="entity, index : ${group.value}">
                         <li>
-                            <a class="nav-link" th:href="@{/admin-board/{entityName}(entityName=${entity.getName()})}">
+                            <a class="nav-link" th:href="@{/admin-board/{entityName}(entityName=${entity.getName()}, keyword='ALL', type='ALL')}">
                                 <i class="nc-icon nc-circle-09"></i>
                                 <p th:text="${entity.getDisplayName()}"></p>
                             </a>

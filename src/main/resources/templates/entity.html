@@ -110,12 +110,11 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row" style="margin-top: 40px;">
                                     <div class="col-md-2">
                                         <select
                                                 class="form-select form-select-md form-group searchSelect"
                                                 aria-label=".form-select-md example"
-                                                th:value="${type}"
                                         >
                                             <th:block
                                                     th:each="value, i: ${entity.getColumns()}">
@@ -129,13 +128,22 @@
                                         </select>
                                     </div>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control searchInput"
-                                               placeholder="value"
-                                               th:value="${keyword}" name="keyword" id="keyword">
+                                        <th:block th:if="${keyword eq 'ALL'}">
+                                            <input type="text" class="form-control searchInput"
+                                                   placeholder="value"
+                                                   name="keyword">
+                                        </th:block>
+                                        <th:block th:if="${keyword != 'ALL'}">
+                                            <input type="text" class="form-control searchInput"
+                                                   placeholder="value"
+                                                   name="keyword" id="keyword" th:value="${keyword}">
+                                        </th:block>
+
                                     </div>
                                     <div class="col-md-1">
                                         <button
                                                 class="btn btn-info btn-fill pull-right searchButton"
+                                                type="button"
                                         >
                                             SEARCH
                                         </button>
@@ -170,7 +178,7 @@
                                                             th:if="${field.getRelationType().name() == 'NON_RELATIONSHIP'}">
                                                         <th:block th:if="${field.getIsId() == true}">
                                                             <td>
-                                                                <a style="display:block; text-overflow: ellipsis; overflow:hidden; width:100px; white-space: nowrap; word-break: break-all;"
+                                                                <a style="display:block; text-overflow: ellipsis; overflow:hidden; width:100px; white-space: nowrap; word-break: break-all; text-decoration: none; color: #1DC7EA"
                                                                    th:text="${@adminBoardFactory.getFieldMappingValue(object, field.getName())}"
                                                                    th:href="@{/admin-board/{entityName}/{id} (entityName=${entityName}, id=${@adminBoardFactory.getFieldMappingValue(object, field.getName())})}"
                                                                 ></a>
@@ -204,13 +212,14 @@
                                     <li class="page-item"
                                         th:class="${data.number == pageNumber} ? 'page-item active' : 'page-item'"
                                         th:each="pageNumber : ${#numbers.sequence(data.number - (data.number % data.size), (data.number - (data.number % data.size) + data.size - 1) < data.totalPages ? (data.number - (data.number % data.size) + data.size - 1) : data.totalPages-1)}">
-                                        <a class="page-link" th:href="@{/admin-board/{entityName}(entityName=${entityName}, keyword=${keyword}, type=${type}, page=${pageNumber},size=${data.size},sort=${data.sort})}"
+                                        <a class="page-link"
+                                           th:href="@{/admin-board/{entityName}(entityName=${entityName}, keyword=${keyword}, type=${type}, page=${pageNumber},size=${data.size},sort=${data.sort})}"
                                            th:text="${pageNumber+1}"></a>
                                     </li>
                                     <li th:class="${!data.hasNext} ? 'page-item disabled' : 'page-item'">
-                                    <a class="page-link"
+                                        <a class="page-link"
 
-                                       th:href="@{/admin-board/{entityName}(entityName=${entityName}, keyword=${keyword}, type=${type}, page=${data.number+1},size=${data.size},sort=${data.sort})}">></a>
+                                           th:href="@{/admin-board/{entityName}(entityName=${entityName}, keyword=${keyword}, type=${type}, page=${data.number+1},size=${data.size},sort=${data.sort})}">></a>
                                     </li>
                                     <li class="page-item" th:class="${data.last} ? 'page-item disabled' : 'page-item'">
                                         <a class="page-link"
@@ -268,8 +277,8 @@
         let inputValue = $(idName).val();
         let searchType = $(".searchSelect option:selected").val();
 
-        if(inputValue.length > 0) {
-            location.href="/admin-board/" + [[${entityName}]] + "?keyword="+inputValue + "&type=" + searchType;
+        if (inputValue.length > 0) {
+            location.href = "/admin-board/" + [[${entityName}]] + "?keyword=" + inputValue + "&type=" + searchType;
         } else {
             alert("Please enter a search term.");
             return;
