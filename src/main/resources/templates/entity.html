@@ -202,11 +202,13 @@
                                 <ul class="pagination justify-content-center">
                                     <li class="page-item" th:class="${data.first} ? 'page-item disabled' : 'page-item'">
                                         <a class="page-link"
+                                           style="color:#1DC7EA;"
                                            th:href="@{/admin-board/{entityName}(entityName=${entityName}, keyword=${keyword}, type=${type}, page=0,size=${data.size},sort=${data.sort})}"><<</a>
                                     </li>
                                     <li class="page-item"
                                         th:class="${!data.hasPrevious} ? 'page-item disabled' : 'page-item'">
                                         <a class="page-link"
+                                           style="color:#1DC7EA;"
                                            th:href="@{/admin-board/{entityName}(entityName=${entityName}, keyword=${keyword}, type=${type},page=${data.number-1},size=${data.size},sort=${data.sort})}"><</a>
                                     </li>
                                     <li class="page-item"
@@ -218,11 +220,12 @@
                                     </li>
                                     <li th:class="${!data.hasNext} ? 'page-item disabled' : 'page-item'">
                                         <a class="page-link"
-
+                                           style="color:#1DC7EA;"
                                            th:href="@{/admin-board/{entityName}(entityName=${entityName}, keyword=${keyword}, type=${type}, page=${data.number+1},size=${data.size},sort=${data.sort})}">></a>
                                     </li>
                                     <li class="page-item" th:class="${data.last} ? 'page-item disabled' : 'page-item'">
                                         <a class="page-link"
+                                           style="color:#1DC7EA;"
                                            th:href="@{/admin-board/{entityName}(entityName=${entityName}, keyword=${keyword}, type=${type}, page=${data.totalPages-1},size=${data.size},sort=${data.sort})}">>></a>
                                     </li>
                                 </ul>
