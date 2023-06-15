@@ -112,6 +112,7 @@ public class AdminBoardViewController {
         model.addAttribute("object", returnObject);
         model.addAttribute("entityName", entityName);
         model.addAttribute("entities", adminBoardFactory.getEntities());
+        model.addAttribute("objectId", id);
 
         return "objectDetail";
     }
@@ -179,6 +180,26 @@ public class AdminBoardViewController {
         model.addAttribute("entities", adminBoardFactory.getEntities());
         model.addAttribute("enums", adminBoardFactory.getEnumClass());
         return "createObject";
+    }
+
+    @GetMapping("/{entityName}/object/{id}/edit")
+    public String updateObjectView(
+            Model model,
+            @PathVariable("entityName") String entityName,
+            @PathVariable("id") Long id
+    ) {
+        getSideBarModel(model);
+        model.addAttribute("entity", adminBoardFactory.getEntity(entityName));
+        model.addAttribute("entityName", entityName);
+        model.addAttribute("entities", adminBoardFactory.getEntities());
+        model.addAttribute("enums", adminBoardFactory.getEnumClass());
+        Optional<Object> object = adminBoardFactory.getObject(entityName, id);
+        Object returnObject = null;
+        if (object.isPresent()) {
+            returnObject = object.get();
+        }
+        model.addAttribute("object", returnObject);
+        return "updateObject";
     }
 
     private void getSideBarModel(Model model) {

@@ -10,6 +10,10 @@ import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryBuilde
 import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryClient;
 import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.proxy.HibernateProxy;
+import org.springframework.aop.framework.Advised;
+import org.springframework.aop.framework.AopProxyUtils;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.data.domain.*;
 import org.springframework.data.repository.CrudRepository;
 
@@ -182,13 +186,25 @@ public class AdminBoardFactory {
 
     public Object getFieldMappingValue(Object root, String fieldName) {
         try {
-            Field field = root.getClass().getDeclaredField(fieldName);
-            Method getter = root.getClass().getDeclaredMethod((field.getType().equals(boolean.class) ? "is" : "get") + field.getName().substring(0, 1).toUpperCase(Locale.ROOT) + field.getName().substring(1));
-
-            return getter.invoke(root);
+            Object unwrappedRoot = unwrapProxy(root);
+            log.info("unwrappedRoot = {} {} {}", unwrappedRoot, unwrappedRoot.getClass(), unwrappedRoot.getClass().getSimpleName());
+            Field field = unwrappedRoot.getClass().getDeclaredField(fieldName);
+            Method getter = unwrappedRoot.getClass().getDeclaredMethod((field.getType().equals(boolean.class) ? "is" : "get") + field.getName().substring(0, 1).toUpperCase(Locale.ROOT) + field.getName().substring(1));
+            return getter.invoke(unwrappedRoot);
         } catch (Exception e) {
-            // log exception
+            e.printStackTrace();
         }
         return null;
+    }
+
+    private Object unwrapProxy(Object object) {
+        if (object instanceof HibernateProxy) {
+            try {
+                return ((HibernateProxy) object).getHibernateLazyInitializer().getImplementation();
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
+        return object;
     }
 }
