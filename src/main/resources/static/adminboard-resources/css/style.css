@@ -90,3 +90,8 @@ body::before {
     color: #999;
     text-decoration: none;
 }
+
+.paginationButton {
+    background-color: #1DC7EA;
+    color: #fff;
+}
