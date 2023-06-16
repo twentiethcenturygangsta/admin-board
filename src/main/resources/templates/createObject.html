@@ -114,7 +114,7 @@
                                                         </label>
                                                         <th:block
                                                                 th:if="${field.getRelationType().name() == 'MANY_TO_ONE'}">
-                                                            <div class="api">
+                                                            <div class="api" style="border: 1px solid #b384e7; padding-left:10px; padding-right:10px">
                                                                 <div class="row">
                                                                     <div class="col-md-2">
                                                                         <select th:id="'searchType-' + ${@adminBoardFactory.getEntity(field.getType()).getName()}"
@@ -143,32 +143,33 @@
                                                                             SEARCH
                                                                         </button>
                                                                     </div>
+                                                                    <div class="col-md-12"
+                                                                         style="height: 500px; overflow: scroll">
+                                                                        <div class="card-body table-full-width table-responsive">
+                                                                            <table class="pagination-results table table-hover table-striped">
+                                                                                <thead id="searchResultsHeader">
+                                                                                <th></th>
+                                                                                <th:block
+                                                                                        th:each="field1, i : ${@adminBoardFactory.getEntity(field.getType()).getColumns()}"
+                                                                                        th:if="${field1.getRelationType().name == 'NON_RELATIONSHIP'} and ${i.count le 6}">
+                                                                                    <th>
+                                                                                        <span th:text="${field1.getDisplayName()}"></span>
+                                                                                    </th>
+                                                                                </th:block>
+
+                                                                                </thead>
+                                                                                <input type="hidden" id="scriptData"
+                                                                                       th:value="${scriptData}"/>
+
+                                                                                <tbody th:id="'searchResults-' + ${@adminBoardFactory.getEntity(field.getType()).getName()}">
+                                                                                </tbody>
+
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-12"
-                                                                 style="height: 500px; overflow: scroll">
-                                                                <div class="card-body table-full-width table-responsive">
-                                                                    <table class="pagination-results table table-hover table-striped">
-                                                                        <thead id="searchResultsHeader">
-                                                                        <th></th>
-                                                                        <th:block
-                                                                                th:each="field1, i : ${@adminBoardFactory.getEntity(field.getType()).getColumns()}"
-                                                                                th:if="${field1.getRelationType().name == 'NON_RELATIONSHIP'} and ${i.count le 6}">
-                                                                            <th>
-                                                                                <span th:text="${field1.getDisplayName()}"></span>
-                                                                            </th>
-                                                                        </th:block>
 
-                                                                        </thead>
-                                                                        <input type="hidden" id="scriptData"
-                                                                               th:value="${scriptData}"/>
-
-                                                                        <tbody th:id="'searchResults-' + ${@adminBoardFactory.getEntity(field.getType()).getName()}">
-                                                                        </tbody>
-
-                                                                    </table>
-                                                                </div>
-                                                            </div>
                                                         </th:block>
                                                         <th:block
                                                                 th:if="${field.getRelationType().name() == 'NON_RELATIONSHIP'}">

@@ -1,5 +1,8 @@
 package com.github.twentiethcenturygangsta.adminboard;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.twentiethcenturygangsta.adminboard.client.AdminBoardClient;
 import com.github.twentiethcenturygangsta.adminboard.client.AdminBoardInfo;
@@ -9,6 +12,10 @@ import com.github.twentiethcenturygangsta.adminboard.entity.EntityInfo;
 import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryBuilder;
 import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryClient;
 import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryInfo;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.aop.framework.Advised;
@@ -144,7 +151,8 @@ public class AdminBoardFactory {
         List<T> filteredEntities = new ArrayList<>();
         for (Object entity : allEntities) {
             if (containsIgnoreCase(getEntityValue(entity, searchType), keyword)) {
-                filteredEntities.add((T) entity);
+                T dto = createDtoFromEntity(entity, repositoryInfo.getDomain());
+                filteredEntities.add(dto);
             }
         }
 
@@ -153,6 +161,43 @@ public class AdminBoardFactory {
         List<T> pageEntities = filteredEntities.subList(start, end);
         Pageable pageable = PageRequest.of(pageIndex, pageSize);
         return new PageImpl<>(pageEntities, pageable, filteredEntities.size());
+    }
+
+    private <T> T createDtoFromEntity(Object entity, Class<?> dtoClass) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        Map<String, Object> object = new HashMap<>();
+
+        try {
+
+//            String json = objectMapper.writeValueAsString(entity);
+//            T dto = objectMapper.readValue(json, objectMapper.getTypeFactory().constructType(dtoClass));
+//            log.info("dto = {}", dto);
+
+           for (Field dtoField : dtoClass.getDeclaredFields()) {
+                if (!isAssociationField(dtoField)) {
+                    Field entityField = entity.getClass().getDeclaredField(dtoField.getName());
+                    entityField.setAccessible(true);
+                    Object value = entityField.get(entity);
+                    object.put(dtoField.getName(), value);
+                }
+            }
+            T dto = (T) objectMapper.convertValue(object, dtoClass);
+            return dto;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private boolean isAssociationField(Field field) {
+        return field.isAnnotationPresent(ManyToOne.class) || field.isAnnotationPresent(OneToMany.class) || field.isAnnotationPresent(ManyToMany.class) || field.isAnnotationPresent(OneToOne.class);
+    }
+
+    private Object getEntityFieldValue(Object entity, Field field) throws IllegalAccessException {
+        field.setAccessible(true);
+        return field.get(entity);
     }
 
     private String getEntityValue(Object entity, String fieldName) {
@@ -185,13 +230,17 @@ public class AdminBoardFactory {
     }
 
     public Object getFieldMappingValue(Object root, String fieldName) {
+
         try {
             Object unwrappedRoot = unwrapProxy(root);
-            log.info("unwrappedRoot = {} {} {}", unwrappedRoot, unwrappedRoot.getClass(), unwrappedRoot.getClass().getSimpleName());
+//            Object unwrappedRoot = root;
             Field field = unwrappedRoot.getClass().getDeclaredField(fieldName);
             Method getter = unwrappedRoot.getClass().getDeclaredMethod((field.getType().equals(boolean.class) ? "is" : "get") + field.getName().substring(0, 1).toUpperCase(Locale.ROOT) + field.getName().substring(1));
+            log.info("unwrappedRoot = {} {} {} {}", unwrappedRoot, unwrappedRoot.getClass(), unwrappedRoot.getClass().getSimpleName(), field);
+            log.info("object = {}", getter.invoke(unwrappedRoot));
             return getter.invoke(unwrappedRoot);
         } catch (Exception e) {
+            log.error("error = {}", root);
             e.printStackTrace();
         }
         return null;
@@ -202,7 +251,7 @@ public class AdminBoardFactory {
             try {
                 return ((HibernateProxy) object).getHibernateLazyInitializer().getImplementation();
             } catch (Exception e) {
-                log.error(e.getMessage());
+                log.error("unwrapProxy = {}", e.getMessage());
             }
         }
         return object;
