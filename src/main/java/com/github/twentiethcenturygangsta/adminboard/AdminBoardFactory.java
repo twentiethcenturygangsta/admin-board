@@ -1,6 +1,7 @@
 package com.github.twentiethcenturygangsta.adminboard;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +28,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -92,8 +94,9 @@ public class AdminBoardFactory {
         return adminBoardInfoTable;
     }
 
-    public Object createObject(String entityName, HashMap<String, Object> data) {
+    public void createObject(String entityName, HashMap<String, Object> data) {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<EntityInfo> entityInfos = entityClient.getEntities();
 
         Map<String, Object> object = new HashMap<>();
@@ -121,13 +124,47 @@ public class AdminBoardFactory {
             }
         }
 
+        log.info("createObject = {}", object);
+
         RepositoryInfo repositoryInfo = repositoryClient.getRepository(entityName);
         Object repositoryObject = repositoryInfo.getRepositoryObject();
         Class<?> entityClass = repositoryInfo.getDomain();
         RepositoryBuilder<Object, Object> repositoryBuilder = RepositoryBuilder.forObject(repositoryObject, repositoryInfo.getDomain(), repositoryInfo.getIdType());
         CrudRepository<Object, Object> repository = repositoryBuilder.build(CrudRepository.class);
-        Object instance = mapper.convertValue(object, entityClass);
-        return repository.save(instance);
+        try {
+            Constructor<?> constructor = entityClass.getDeclaredConstructor();
+            constructor.setAccessible(true); // 접근 제한자 설정
+            Object instance = constructor.newInstance();
+            for (Map.Entry<String, Object> entry : object.entrySet()) {
+                Field field = entityClass.getDeclaredField(entry.getKey());
+                field.setAccessible(true);
+                if(field.getType() == Long.class) {
+                    field.set(instance, Long.parseLong((String) entry.getValue()));
+                } else if (field.getType() == int.class) {
+                    field.set(instance, Integer.parseInt((String) entry.getValue()));
+                } else if (field.getType() == String.class) {
+                    field.set(instance, entry.getValue());
+                } else if (field.getType() == Boolean.class) {
+                    field.set(instance, Boolean.parseBoolean((String) entry.getValue()));
+                } else if(field.getType().isEnum()) {
+                    Enum<?> enumValue = Enum.valueOf((Class<Enum>) field.getType(), (String) entry.getValue());
+                    field.set(instance, enumValue);
+                }
+                else {
+                    field.set(instance, entry.getValue());
+//                    Map<String, List<?>> enums = getEnumClass();
+//                    enums.get(field.getType().getSimpleName());
+                }
+            }
+            repository.save(instance);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        Object instance = mapper.convertValue(object, entityClass);
+//        Object instance = mapper.convertValue(object, entityClass);
+
+//        repository.save(instance);
+//        return repository.save(instance);
     }
 
     public Page<?> getObjects(String entityName, String keyword, String type, Pageable pageable) {
@@ -236,8 +273,8 @@ public class AdminBoardFactory {
 //            Object unwrappedRoot = root;
             Field field = unwrappedRoot.getClass().getDeclaredField(fieldName);
             Method getter = unwrappedRoot.getClass().getDeclaredMethod((field.getType().equals(boolean.class) ? "is" : "get") + field.getName().substring(0, 1).toUpperCase(Locale.ROOT) + field.getName().substring(1));
-            log.info("unwrappedRoot = {} {} {} {}", unwrappedRoot, unwrappedRoot.getClass(), unwrappedRoot.getClass().getSimpleName(), field);
-            log.info("object = {}", getter.invoke(unwrappedRoot));
+//            log.info("unwrappedRoot = {} {} {} {}", unwrappedRoot, unwrappedRoot.getClass(), unwrappedRoot.getClass().getSimpleName(), field);
+//            log.info("object = {}", getter.invoke(unwrappedRoot));
             return getter.invoke(unwrappedRoot);
         } catch (Exception e) {
             log.error("error = {}", root);
