@@ -309,6 +309,40 @@
                 }
             });
         });
+
+        let data = {}
+        let entity = /*[[${entityName}]]*/ '';
+
+
+        $('#createButton').click(function () {
+            console.log("createButton : ", checkedData);
+            if (checkedData.length >0) {
+                data[entityName] = checkedData[0][1];
+            }
+            console.log(data)
+            $('.inputValue').map(function () {
+                let name = $(this).attr('name');
+                data[name] = $(this).val();
+            }).get();
+            console.log("values ", data);
+
+            $.ajax({
+                url: '/admin-board/action/' + entity + '/object',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function (response) {
+                    // 요청 성공 시 처리할 로직
+                    console.log("POST 요청 성공");
+                    console.log(response);
+                },
+                error: function (xhr, status, error) {
+                    // 요청 실패 시 처리할 로직
+                    console.log("POST 요청 실패");
+                    console.log(xhr.responseText);
+                }
+            });
+        });
     });
 
     function displaySearchResults(data) {
@@ -350,40 +384,6 @@
             }
             console.log('Checked Data:', checkedData);
         });
-
-        $(document).ready(function () {
-            let data = {}
-            let entity = /*[[${entityName}]]*/ '';
-
-
-            $('#createButton').click(function () {
-                console.log("createButton : ", checkedData);
-                data[entityName] = checkedData[0][1];
-                console.log(data)
-                let values = $('.inputValue').map(function () {
-                    let name = $(this).attr('name');
-                    data[name] = $(this).val();
-                }).get();
-                console.log("values ", data);
-
-                $.ajax({
-                    url: '/admin-board/action/' + entity + '/object',
-                    type: 'POST',
-                    data: JSON.stringify(data),
-                    contentType: 'application/json',
-                    success: function (response) {
-                        // 요청 성공 시 처리할 로직
-                        console.log("POST 요청 성공");
-                        console.log(response);
-                    },
-                    error: function (xhr, status, error) {
-                        // 요청 실패 시 처리할 로직
-                        console.log("POST 요청 실패");
-                        console.log(xhr.responseText);
-                    }
-                });
-            });
-        })
 
         // Display pagination
         var pagination = $('#pagination');
