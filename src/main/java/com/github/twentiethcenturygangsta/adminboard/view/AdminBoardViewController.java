@@ -64,7 +64,7 @@ public class AdminBoardViewController {
         Optional<AdminBoardUser> adminBoardUser = adminBoardLoginService.loginAdminBoardUser(loginRequestDto);
         if(adminBoardUser.isPresent()) {
             HttpSession session = request.getSession();
-            session.setAttribute(SessionConst.LOGIN_MEMBER, adminBoardUser);
+            session.setAttribute(SessionConst.LOGIN_MEMBER, adminBoardUser.get().getUserId());
             return "redirect:/admin-board/AdminBoardUser";
         } else{
             model.addAttribute("error", "일치하는 대시보드 계정이 존재하지 않습니다.");
@@ -160,14 +160,15 @@ public class AdminBoardViewController {
         return "login";
     }
 
-    @GetMapping("/task")
+    @GetMapping("/tasks")
     public String TaskView(
             Model model,
-            @RequestParam("keyword") String keyword,
-            @RequestParam("type") String type,
-            @PageableDefault Pageable pageable) {
+            HttpServletRequest request
+            ) {
+        HttpSession session = request.getSession();
         getSideBarModel(model);
-        model.addAttribute("data", adminBoardFactory.getObjects("Task", keyword, type, pageable));
+        model.addAttribute("userName", session.getAttribute(SessionConst.LOGIN_MEMBER));
+//        model.addAttribute("data", adminBoardFactory.getObjects("Task", keyword, type, pageable));
         model.addAttribute("entityName", "Task");
         return "tasks";
     }

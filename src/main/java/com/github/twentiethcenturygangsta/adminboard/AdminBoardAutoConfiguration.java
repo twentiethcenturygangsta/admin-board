@@ -5,6 +5,7 @@ import com.github.twentiethcenturygangsta.adminboard.client.AdminBoardClient;
 import com.github.twentiethcenturygangsta.adminboard.client.EntityClient;
 import com.github.twentiethcenturygangsta.adminboard.repository.AdminBoardUserRepository;
 import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryClient;
+import com.github.twentiethcenturygangsta.adminboard.repository.TaskRepository;
 import com.github.twentiethcenturygangsta.adminboard.view.AdminBoardViewActionController;
 import com.github.twentiethcenturygangsta.adminboard.view.AdminBoardViewController;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -45,8 +46,8 @@ public class AdminBoardAutoConfiguration {
     }
 
     @Bean
-    public AdminBoardFactory adminBoardFactory(RepositoryClient repositoryClient, AdminBoardClient adminBoardClient, EntityClient entityClient, ObjectMapper objectMapper) {
-        return new AdminBoardFactory(repositoryClient, adminBoardClient, entityClient, objectMapper);
+    public AdminBoardFactory adminBoardFactory(RepositoryClient repositoryClient, AdminBoardClient adminBoardClient, EntityClient entityClient, ObjectMapper objectMapper, TaskRepository taskRepository, AdminBoardUserRepository adminBoardUserRepository) {
+        return new AdminBoardFactory(repositoryClient, adminBoardClient, entityClient, objectMapper, taskRepository, adminBoardUserRepository);
     }
 
     @Bean

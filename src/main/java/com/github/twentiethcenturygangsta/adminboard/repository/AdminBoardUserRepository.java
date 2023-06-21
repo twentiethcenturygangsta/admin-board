@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface AdminBoardUserRepository extends JpaRepository<AdminBoardUser, Long> {
     Optional<AdminBoardUser> findByUserIdAndPassword(String userId, String password);
+    Optional<AdminBoardUser> findByUserId(String userId);
 }

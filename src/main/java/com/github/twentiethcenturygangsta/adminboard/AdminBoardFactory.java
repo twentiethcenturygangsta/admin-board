@@ -1,27 +1,21 @@
 package com.github.twentiethcenturygangsta.adminboard;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.twentiethcenturygangsta.adminboard.client.AdminBoardClient;
 import com.github.twentiethcenturygangsta.adminboard.client.AdminBoardInfo;
 import com.github.twentiethcenturygangsta.adminboard.client.EntityClient;
 import com.github.twentiethcenturygangsta.adminboard.entity.ColumnInfo;
 import com.github.twentiethcenturygangsta.adminboard.entity.EntityInfo;
-import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryBuilder;
-import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryClient;
-import com.github.twentiethcenturygangsta.adminboard.repository.RepositoryInfo;
+import com.github.twentiethcenturygangsta.adminboard.repository.*;
+import com.github.twentiethcenturygangsta.adminboard.task.Task;
+import com.github.twentiethcenturygangsta.adminboard.user.AdminBoardUser;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.proxy.HibernateProxy;
-import org.springframework.aop.framework.Advised;
-import org.springframework.aop.framework.AopProxyUtils;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.data.domain.*;
 import org.springframework.data.repository.CrudRepository;
 
@@ -39,14 +33,25 @@ public class AdminBoardFactory {
     private final RepositoryClient repositoryClient;
     private final EntityClient entityClient;
     private final AdminBoardClient adminBoardClient;
+    private final TaskRepository taskRepository;
+    private final AdminBoardUserRepository adminBoardUserRepository;
     private final ObjectMapper objectMapper;
 
 
-    public AdminBoardFactory(final RepositoryClient repositoryClient, final AdminBoardClient adminBoardClient, final EntityClient entityClient, final ObjectMapper objectMapper) {
+    public AdminBoardFactory(
+            final RepositoryClient repositoryClient,
+            final AdminBoardClient adminBoardClient,
+            final EntityClient entityClient,
+            final ObjectMapper objectMapper,
+            final TaskRepository taskRepository,
+            final AdminBoardUserRepository adminBoardUserRepository
+    ) {
         this.repositoryClient = repositoryClient;
         this.entityClient = entityClient;
         this.adminBoardClient = adminBoardClient;
         this.objectMapper = objectMapper;
+        this.taskRepository = taskRepository;
+        this.adminBoardUserRepository = adminBoardUserRepository;
     }
 
     public Map<String, List<EntityInfo>> getGroupEntities() {
@@ -81,6 +86,20 @@ public class AdminBoardFactory {
             }
         }
         return enums;
+    }
+
+    public void createTask(String taskContent, String adminMemberName) {
+        Optional<AdminBoardUser> user = adminBoardUserRepository.findByUserId(adminMemberName);
+        if(user.isPresent()) {
+            AdminBoardUser adminBoardUser = user.get();
+            Task task = Task.builder()
+                    .content(taskContent)
+                    .adminBoardUser(adminBoardUser)
+                    .isCompleted(false)
+                    .build();
+            taskRepository.save(task);
+        }
+
     }
 
     public HashMap<String, String> getAdminBoardInfo() {

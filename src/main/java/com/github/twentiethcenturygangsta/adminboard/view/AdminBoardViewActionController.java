@@ -8,6 +8,8 @@ import com.github.twentiethcenturygangsta.adminboard.user.AdminBoardUser;
 import com.github.twentiethcenturygangsta.adminboard.user.LoginRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/admin-board/action")
 public class AdminBoardViewActionController {
@@ -45,6 +48,16 @@ public class AdminBoardViewActionController {
             @PathVariable("entityName") String entityName,
             @RequestBody HashMap<String, Object> object
     ) {
-        return ResponseEntity.ok(adminBoardFactory.createObject(entityName, object));
+        adminBoardFactory.createObject(entityName, object);
+        return ResponseEntity.ok("success");
+    }
+
+    @PostMapping("/tasks/object")
+    public ResponseEntity<Object> createTask(
+            @RequestBody HashMap<String, Object> object
+    ) {
+        log.info("task = {} {} ", (String) object.get("taskContent"), (String) object.get("adminBoardUserName"));
+        adminBoardFactory.createTask((String) object.get("taskContent"), (String) object.get("adminBoardUserName"));
+        return ResponseEntity.ok("success");
     }
 }
