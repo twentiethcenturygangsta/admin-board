@@ -138,17 +138,33 @@ public class AdminBoardFactory {
             for (Map.Entry<String, Object> entry : object.entrySet()) {
                 Field field = entityClass.getDeclaredField(entry.getKey());
                 field.setAccessible(true);
+
                 if(field.getType() == Long.class) {
-                    field.set(instance, Long.parseLong((String) entry.getValue()));
+                    String value = (String) entry.getValue();
+                    if(!value.isEmpty()) {
+                        field.set(instance, Long.parseLong((String) entry.getValue()));
+                    }
                 } else if (field.getType() == int.class) {
-                    field.set(instance, Integer.parseInt((String) entry.getValue()));
+                    String value = (String) entry.getValue();
+                    if(!value.isEmpty()) {
+                        field.set(instance, Integer.parseInt((String) entry.getValue()));
+                    }
                 } else if (field.getType() == String.class) {
-                    field.set(instance, entry.getValue());
+                    String value = (String) entry.getValue();
+                    if(!value.isEmpty()) {
+                        field.set(instance, entry.getValue());
+                    }
                 } else if (field.getType() == Boolean.class) {
-                    field.set(instance, Boolean.parseBoolean((String) entry.getValue()));
+                    String value = (String) entry.getValue();
+                    if(!value.isEmpty()) {
+                        field.set(instance, Boolean.parseBoolean((String) entry.getValue()));
+                    }
                 } else if(field.getType().isEnum()) {
-                    Enum<?> enumValue = Enum.valueOf((Class<Enum>) field.getType(), (String) entry.getValue());
-                    field.set(instance, enumValue);
+                    String value = (String) entry.getValue();
+                    if(!value.isEmpty()) {
+                        Enum<?> enumValue = Enum.valueOf((Class<Enum>) field.getType(), (String) entry.getValue());
+                        field.set(instance, enumValue);
+                    }
                 }
                 else {
                     field.set(instance, entry.getValue());
