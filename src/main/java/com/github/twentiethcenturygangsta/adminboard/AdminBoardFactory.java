@@ -168,19 +168,12 @@ public class AdminBoardFactory {
                 }
                 else {
                     field.set(instance, entry.getValue());
-//                    Map<String, List<?>> enums = getEnumClass();
-//                    enums.get(field.getType().getSimpleName());
                 }
             }
             repository.save(instance);
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        Object instance = mapper.convertValue(object, entityClass);
-//        Object instance = mapper.convertValue(object, entityClass);
-
-//        repository.save(instance);
-//        return repository.save(instance);
     }
 
     public Page<?> getObjects(String entityName, String keyword, String type, Pageable pageable) {
@@ -223,11 +216,6 @@ public class AdminBoardFactory {
         Map<String, Object> object = new HashMap<>();
 
         try {
-
-//            String json = objectMapper.writeValueAsString(entity);
-//            T dto = objectMapper.readValue(json, objectMapper.getTypeFactory().constructType(dtoClass));
-//            log.info("dto = {}", dto);
-
            for (Field dtoField : dtoClass.getDeclaredFields()) {
                 if (!isAssociationField(dtoField)) {
                     Field entityField = entity.getClass().getDeclaredField(dtoField.getName());
