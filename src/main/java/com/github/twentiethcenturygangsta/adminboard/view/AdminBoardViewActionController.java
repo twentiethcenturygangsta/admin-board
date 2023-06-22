@@ -61,6 +61,15 @@ public class AdminBoardViewActionController {
         return ResponseEntity.ok("success");
     }
 
+    @DeleteMapping("{entityName}/object/{id}")
+    public ResponseEntity<Object> deleteObject(
+            @PathVariable("entityName") String entityName,
+            @PathVariable("id") Long id
+    ) {
+        adminBoardFactory.removeObject(id, entityName);
+        return ResponseEntity.ok("success");
+    }
+
     @PostMapping("/tasks/object/{id}")
     public ResponseEntity<Object> checkTask(
             @PathVariable("id") Long id
