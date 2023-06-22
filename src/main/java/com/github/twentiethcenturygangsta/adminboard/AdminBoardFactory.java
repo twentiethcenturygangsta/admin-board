@@ -9,6 +9,7 @@ import com.github.twentiethcenturygangsta.adminboard.entity.ColumnInfo;
 import com.github.twentiethcenturygangsta.adminboard.entity.EntityInfo;
 import com.github.twentiethcenturygangsta.adminboard.repository.*;
 import com.github.twentiethcenturygangsta.adminboard.task.Task;
+import com.github.twentiethcenturygangsta.adminboard.task.TaskResponseDto;
 import com.github.twentiethcenturygangsta.adminboard.user.AdminBoardUser;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
@@ -26,6 +27,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -99,7 +101,26 @@ public class AdminBoardFactory {
                     .build();
             taskRepository.save(task);
         }
+    }
 
+    public void checkTask(Long id) {
+        Task task = taskRepository.findById(id).orElseThrow();
+        task.checkIsCompleted();
+        taskRepository.save(task);
+    }
+
+    public void removeObject(Long id, String entityName) {
+        RepositoryInfo repositoryInfo = repositoryClient.getRepository(entityName);
+        Object repositoryObject = repositoryInfo.getRepositoryObject();
+        Class<?> entityClass = repositoryInfo.getDomain();
+        RepositoryBuilder<Object, Object> repositoryBuilder = RepositoryBuilder.forObject(repositoryObject, repositoryInfo.getDomain(), repositoryInfo.getIdType());
+        CrudRepository<Object, Object> repository = repositoryBuilder.build(CrudRepository.class);
+        repository.deleteById(id);
+    }
+
+    public List<TaskResponseDto> getTasks(String adminMemberName) {
+        AdminBoardUser user = adminBoardUserRepository.findByUserId(adminMemberName).orElseThrow();
+        return taskRepository.findAllByAdminBoardUser(user).stream().map(TaskResponseDto::new).collect(Collectors.toList());
     }
 
     public HashMap<String, String> getAdminBoardInfo() {

@@ -76,8 +76,6 @@ public class AdminBoardViewController {
     public String EntityView(
             Model model,
             @PathVariable("entityName") String entityName,
-//            @RequestParam(value = "keyword", required = false) String keyword,
-//            @RequestParam(value = "type", required = false) String type,
             String keyword,
             String type,
             @PageableDefault Pageable pageable) {
@@ -160,15 +158,13 @@ public class AdminBoardViewController {
         return "login";
     }
 
-    @GetMapping("/tasks")
-    public String TaskView(
-            Model model,
-            HttpServletRequest request
-            ) {
+    @GetMapping("/task")
+    public String TaskView( Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         getSideBarModel(model);
+        String adminBoardUser = (String) session.getAttribute(SessionConst.LOGIN_MEMBER);
         model.addAttribute("userName", session.getAttribute(SessionConst.LOGIN_MEMBER));
-//        model.addAttribute("data", adminBoardFactory.getObjects("Task", keyword, type, pageable));
+        model.addAttribute("data", adminBoardFactory.getTasks(adminBoardUser));
         model.addAttribute("entityName", "Task");
         return "tasks";
     }
@@ -194,6 +190,7 @@ public class AdminBoardViewController {
         model.addAttribute("entityName", entityName);
         model.addAttribute("entities", adminBoardFactory.getEntities());
         model.addAttribute("enums", adminBoardFactory.getEnumClass());
+        model.addAttribute("objectId", id);
         Optional<Object> object = adminBoardFactory.getObject(entityName, id);
         Object returnObject = null;
         if (object.isPresent()) {

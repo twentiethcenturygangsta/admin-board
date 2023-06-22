@@ -3,20 +3,12 @@ package com.github.twentiethcenturygangsta.adminboard.view;
 import com.github.twentiethcenturygangsta.adminboard.AdminBoardFactory;
 import com.github.twentiethcenturygangsta.adminboard.AdminBoardLoginService;
 import com.github.twentiethcenturygangsta.adminboard.AdminBoardServiceFactory;
-import com.github.twentiethcenturygangsta.adminboard.SessionConst;
-import com.github.twentiethcenturygangsta.adminboard.user.AdminBoardUser;
-import com.github.twentiethcenturygangsta.adminboard.user.LoginRequestDto;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -58,6 +50,22 @@ public class AdminBoardViewActionController {
     ) {
         log.info("task = {} {} ", (String) object.get("taskContent"), (String) object.get("adminBoardUserName"));
         adminBoardFactory.createTask((String) object.get("taskContent"), (String) object.get("adminBoardUserName"));
+        return ResponseEntity.ok("success");
+    }
+
+    @DeleteMapping("/tasks/object/{id}")
+    public ResponseEntity<Object> deleteTask(
+            @PathVariable("id") Long id
+    ) {
+        adminBoardFactory.removeObject(id, "Task");
+        return ResponseEntity.ok("success");
+    }
+
+    @PostMapping("/tasks/object/{id}")
+    public ResponseEntity<Object> checkTask(
+            @PathVariable("id") Long id
+    ) {
+        adminBoardFactory.checkTask(id);
         return ResponseEntity.ok("success");
     }
 }
