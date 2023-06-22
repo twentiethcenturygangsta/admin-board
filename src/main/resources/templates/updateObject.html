@@ -258,7 +258,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-info btn-fill pull-right" id="update">
+                                    <button type="button" class="btn btn-info btn-fill pull-right" id="update">
                                         UPDATE
                                     </button>
                                     <div class="clearfix"></div>
@@ -342,6 +342,7 @@
     $(document).ready(function () {
         let data = {}
         let entity = /*[[${entityName}]]*/ '';
+        let objectId = /*[[${objectId}]]*/ '';
 
         $('#update').click(function () {
             if (checkedData.length > 0) {
@@ -363,6 +364,7 @@
                     // 요청 성공 시 처리할 로직
                     console.log("POST 요청 성공");
                     console.log(response);
+                    window.location.href="/admin-board/" + entity + "/" + objectId;
                 },
                 error: function (xhr, status, error) {
                     // 요청 실패 시 처리할 로직

@@ -230,7 +230,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-info btn-fill pull-right" id="createButton">
+                                    <button type="button" class="btn btn-info btn-fill pull-right" id="createButton">
                                         Create
                                     </button>
                                     <div class="clearfix"></div>
@@ -288,8 +288,7 @@
         $('.api button').click(function () {
             entityName = $(this).attr('id');
             var keyword = $('input[id^="searchKeyword-' + entityName + '"]').val();
-            var searchType = $('select[id^="searchType-' + entityName + '"]').val();
-            console.log("test");
+            var searchType = $('select[id^="searchType-' + entityName + '"]').val();;
             $.ajax({
                 url: '/admin-board/action/' + entityName + '/search',
                 type: 'GET',
@@ -335,6 +334,7 @@
                     // 요청 성공 시 처리할 로직
                     console.log("POST 요청 성공");
                     console.log(response);
+                    window.location.href="/admin-board/" + entity + "?keyword=ALL&page=ALL"
                 },
                 error: function (xhr, status, error) {
                     // 요청 실패 시 처리할 로직
