@@ -31,4 +31,8 @@ public class Task {
         this.isCompleted = isCompleted;
         this.adminBoardUser = adminBoardUser;
     }
+
+    public void checkIsCompleted() {
+        this.isCompleted = !isCompleted;
+    }
 }
