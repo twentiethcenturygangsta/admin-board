@@ -213,7 +213,7 @@
                                     </li>
                                     <li class="page-item"
                                         th:class="${data.number == pageNumber} ? 'page-item active' : 'page-item'"
-                                        th:each="pageNumber : ${#numbers.sequence(data.number - (data.number % data.size), (data.number - (data.number % data.size) + data.size - 1) < data.totalPages ? (data.number - (data.number % data.size) + data.size - 1) : data.totalPages-1)}">
+                                        th:each="pageNumber : ${#numbers.sequence(data.number - (data.number % data.size), (data.number - (data.number % data.size) + data.size - 1) < data.totalPages ? (data.number - (data.number % data.size) + data.size - 1) : data.totalPages)}">
                                         <a class="page-link"
                                            th:href="@{/admin-board/{entityName}(entityName=${entityName}, keyword=${keyword}, type=${type}, page=${pageNumber},size=${data.size},sort=${data.sort})}"
                                            th:text="${pageNumber+1}"></a>
