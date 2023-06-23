@@ -114,9 +114,10 @@
                                                         </label>
                                                         <th:block
                                                                 th:if="${field.getRelationType().name() == 'MANY_TO_ONE'}">
-                                                            <div class="api" style="border: 1px solid #b384e7; padding-left:10px; padding-right:10px">
+                                                            <div class="api"
+                                                                 style="border: 1px solid #b384e7; padding-left:10px; padding-right:10px">
                                                                 <div class="row">
-                                                                    <div class="card-body" >
+                                                                    <div class="card-body">
                                                                         <!--                                                                        <span th:text="${field.getName()}"></span>-->
                                                                         <th:block
                                                                                 th:each="field2, j:${@adminBoardFactory.getEntity(#strings.capitalize(field.getName())).getColumns()}">
@@ -132,8 +133,9 @@
                                                                                 <th:block
                                                                                         th:with="fieldValue=${@adminBoardFactory.getFieldMappingValue(object, field.getName())}">
                                                                                     <input type="text"
-                                                                                           class="form-control"
+                                                                                           th:class="${field2.getIsId() eq true ? 'inputValue form-control' : 'form-control'}"
                                                                                            disabled=""
+                                                                                           th:name="${@adminBoardFactory.getEntity(field.getType()).getName()}"
                                                                                            th:value="${@adminBoardFactory.getFieldMappingValue(fieldValue, field2.getName())}"
                                                                                            style="margin-bottom: 10px">
                                                                                 </th:block>
@@ -201,12 +203,23 @@
                                                                 th:if="${field.getRelationType().name() == 'NON_RELATIONSHIP'}">
                                                             <th:block
                                                                     th:if="${field.getType() == 'String' || field.getType() == 'int' || field.getType() == 'Integer' || field.getType() == 'Long'}">
-                                                                <input type="text" class="form-control inputValue"
-                                                                       placeholder=""
-                                                                       th:name="${field.getName()}"
-                                                                       style="margin-bottom: 10px"
-                                                                       th:value="${@adminBoardFactory.getFieldMappingValue(object, field.getName())}"
-                                                                >
+                                                                <th:block th:if="${field.getIsId() eq true}">
+                                                                    <input type="text" class="form-control inputValue"
+                                                                           placeholder=""
+                                                                           th:name="${field.getName()}"
+                                                                           disabled
+                                                                           style="margin-bottom: 10px"
+                                                                           th:value="${@adminBoardFactory.getFieldMappingValue(object, field.getName())}"
+                                                                    >
+                                                                </th:block>
+                                                                <th:block th:if="${field.getIsId() eq false}">
+                                                                    <input type="text" class="form-control inputValue"
+                                                                           placeholder=""
+                                                                           th:name="${field.getName()}"
+                                                                           style="margin-bottom: 10px"
+                                                                           th:value="${@adminBoardFactory.getFieldMappingValue(object, field.getName())}"
+                                                                    >
+                                                                </th:block>
                                                             </th:block>
                                                             <th:block th:if="${field.getType() == 'LocalDateTime'}">
                                                             </th:block>
@@ -345,14 +358,14 @@
         let objectId = /*[[${objectId}]]*/ '';
 
         $('#update').click(function () {
-            if (checkedData.length > 0) {
-                data[entityName] = checkedData[0][1];
-            }
             console.log(data)
             let values = $('.inputValue').map(function () {
                 let name = $(this).attr('name');
                 data[name] = $(this).val();
             }).get();
+            if (checkedData.length > 0) {
+                data[entityName] = checkedData[0][1];
+            }
             console.log("values ", data);
 
             $.ajax({
@@ -364,7 +377,7 @@
                     // 요청 성공 시 처리할 로직
                     console.log("POST 요청 성공");
                     console.log(response);
-                    window.location.href="/admin-board/" + entity + "/" + objectId;
+                    window.location.href = "/admin-board/" + entity + "/" + objectId;
                 },
                 error: function (xhr, status, error) {
                     // 요청 실패 시 처리할 로직
