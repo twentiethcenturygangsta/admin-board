@@ -65,7 +65,7 @@ public class AdminBoardViewController {
         if(adminBoardUser.isPresent()) {
             HttpSession session = request.getSession();
             session.setAttribute(SessionConst.LOGIN_MEMBER, adminBoardUser.get().getUserId());
-            return "redirect:/admin-board/AdminBoardUser";
+            return "redirect:/admin-board/task";
         } else{
             model.addAttribute("error", "일치하는 대시보드 계정이 존재하지 않습니다.");
             return "login";
