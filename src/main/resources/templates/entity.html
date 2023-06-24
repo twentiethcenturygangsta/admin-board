@@ -275,6 +275,19 @@
 
 </body>
 <script th:inline="javascript">
+    $(document).ready(function () {
+        console.log("a");
+        showNotification();
+    });
+
+    function showNotification() {
+        var notificationType = sessionStorage.getItem('notification');
+        if (notificationType === 'success') {
+            demo.showObjectNotification("The creation has been successfully completed!");
+            sessionStorage.removeItem('notification');
+        }
+    }
+
     $('.searchButton').on("click", () => {
         let idName = ".searchInput";
         let inputValue = $(idName).val();

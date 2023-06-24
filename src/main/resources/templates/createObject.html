@@ -325,6 +325,7 @@
             }).get();
             console.log("values ", data);
 
+
             $.ajax({
                 url: '/admin-board/action/' + entity + '/object',
                 type: 'POST',
@@ -334,8 +335,9 @@
                     // 요청 성공 시 처리할 로직
                     console.log("POST 요청 성공");
                     console.log(response);
-                    window.location.href="/admin-board/" + entity + "?keyword=ALL&page=ALL"
-                },
+                    sessionStorage.setItem('notification', 'success');
+                    window.location.href = "/admin-board/" + entity + "?keyword=ALL&page=ALL";
+                  },
                 error: function (xhr, status, error) {
                     // 요청 실패 시 처리할 로직
                     console.log("POST 요청 실패");

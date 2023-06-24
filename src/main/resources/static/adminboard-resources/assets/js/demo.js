@@ -515,8 +515,35 @@ demo = {
                 align: align
             }
         });
+    },
+
+    showHelloNotification: function(author, from, align) {
+        color = Math.floor((Math.random() * 4) + 1);
+
+        $.notify({
+            icon: "nc-icon nc-app",
+            message: "Welcome to <b>Admin Board</b>, <b>" + author + "</b>!<br/> Your hub for seamless data management and powerful insights!"
+        }, {
+            type: type[color],
+            timer: 8000,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
+    },
+
+    showObjectNotification: function(message, from, align) {
+        $.notify({
+            icon: "nc-icon nc-app",
+            message: message
+        }, {
+            type: type[1],
+            timer: 8000,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
     }
-
-
-
 }

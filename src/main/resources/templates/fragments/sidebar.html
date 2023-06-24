@@ -7,9 +7,11 @@
 -->
         <div class="sidebar-wrapper">
             <div class="logo">
-                <a href="https://github.com/orgs/twentiethcenturygangsta/repositories" class="simple-text" th:text="${adminBoardInformation.get('title')}" style="text-decoration: none;">
+                <a href="https://github.com/orgs/twentiethcenturygangsta/repositories" class="simple-text"
+                   th:text="${adminBoardInformation.get('title')}" style="text-decoration: none;">
                 </a>
-                <div style="text-align: center; font-size: 10px; font-weight: 400;" th:text="${adminBoardInformation.get('description')}"></div>
+                <div style="text-align: center; font-size: 10px; font-weight: 400;"
+                     th:text="${adminBoardInformation.get('description')}"></div>
             </div>
             <ul class="nav">
                 <li>
@@ -27,25 +29,20 @@
 
                 <th:block th:each="group, index : ${entitiesByGroup}">
                     <th:block th:if="${group.key} != 'AdminBoard'">
-                    <div class="logo" style="padding-left:30px">
-                        <span th:text="${group.key}"></span>
-                    </div>
-                    <th:block th:each="entity, index : ${group.value}">
-                        <li>
-                            <a class="nav-link" th:href="@{/admin-board/{entityName}(entityName=${entity.getName()}, keyword='ALL', type='ALL')}">
-                                <i class="nc-icon nc-circle-09"></i>
-                                <p th:text="${entity.getDisplayName()}"></p>
-                            </a>
-                        </li>
-                    </th:block>
+                        <div class="logo" style="padding-left:30px">
+                            <span th:text="${group.key}"></span>
+                        </div>
+                        <th:block th:each="entity, index : ${group.value}">
+                            <li>
+                                <a class="nav-link"
+                                   th:href="@{/admin-board/{entityName}(entityName=${entity.getName()}, keyword='ALL', type='ALL')}">
+                                    <i class="nc-icon nc-circle-09"></i>
+                                    <p th:text="${entity.getDisplayName()}"></p>
+                                </a>
+                            </li>
+                        </th:block>
                     </th:block>
                 </th:block>
-                <li>
-                    <a class="nav-link" th:href="@{/admin-board/user}">
-                        <i class="nc-icon nc-circle-09"></i>
-                        <p>User</p>
-                    </a>
-                </li>
             </ul>
         </div>
     </div>
