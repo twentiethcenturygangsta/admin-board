@@ -66,7 +66,10 @@ public class AdminBoardViewController {
         if(adminBoardUser.isPresent()) {
             HttpSession session = request.getSession();
             session.setAttribute(SessionConst.LOGIN_MEMBER, adminBoardUser.get().getUserId());
-
+            session.setAttribute("createAuthority", adminBoardServiceFactory.getAdminBoardUser(adminBoardUser.get().getUserId()).getHasCreateObjectAuthority());
+            session.setAttribute("createAdminAuthority", adminBoardServiceFactory.getAdminBoardUser(adminBoardUser.get().getUserId()).getHasCreateAdminBoardUserAuthority());
+            session.setAttribute("updateAuthority", adminBoardServiceFactory.getAdminBoardUser(adminBoardUser.get().getUserId()).getHasUpdateObjectAuthority());
+            session.setAttribute("deleteAuthority", adminBoardServiceFactory.getAdminBoardUser(adminBoardUser.get().getUserId()).getHasDeleteObjectAuthority());
             return "redirect:/admin-board/task";
         } else{
             model.addAttribute("error", "일치하는 대시보드 계정이 존재하지 않습니다.");
@@ -218,10 +221,15 @@ public class AdminBoardViewController {
     private void getNavBarModel(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute(SessionConst.LOGIN_MEMBER);
+        AdminBoardUser adminBoardUser = adminBoardServiceFactory.getAdminBoardUser(userId);
         model.addAttribute("userName", userId);
-        model.addAttribute("createAuthority", adminBoardServiceFactory.getAdminBoardUser(userId).getHasCreateObjectAuthority());
-        model.addAttribute("createAdminAuthority", adminBoardServiceFactory.getAdminBoardUser(userId).getHasCreateAdminBoardUserAuthority());
-        model.addAttribute("updateAuthority", adminBoardServiceFactory.getAdminBoardUser(userId).getHasUpdateObjectAuthority());
-        model.addAttribute("deleteAuthority", adminBoardServiceFactory.getAdminBoardUser(userId).getHasDeleteObjectAuthority());
+        model.addAttribute("createAuthority", adminBoardUser.getHasCreateObjectAuthority());
+        model.addAttribute("createAdminAuthority", adminBoardUser.getHasCreateAdminBoardUserAuthority());
+        model.addAttribute("updateAuthority", adminBoardUser.getHasUpdateObjectAuthority());
+        model.addAttribute("deleteAuthority", adminBoardUser.getHasDeleteObjectAuthority());
+        session.setAttribute("createAuthority", adminBoardUser.getHasCreateObjectAuthority());
+        session.setAttribute("createAdminAuthority", adminBoardUser.getHasCreateAdminBoardUserAuthority());
+        session.setAttribute("updateAuthority", adminBoardUser.getHasUpdateObjectAuthority());
+        session.setAttribute("deleteAuthority", adminBoardUser.getHasDeleteObjectAuthority());
     }
 }
