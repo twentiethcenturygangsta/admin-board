@@ -1,0 +1,19 @@
+<th:block th:fragment="FooterFragment">
+    <footer class="footer">
+        <div class="container-fluid">
+            <nav>
+                <p class="copyright text-center">
+                    ©
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script>
+                    <span th:text="${adminBoardInformation.get('license')}"></span>
+                    <span th:text="${adminBoardInformation.get('version')}">&nbsp&nbsp&nbsp</span>
+                    <i class="nc-icon nc-bulb-63"></i>
+                    <span th:text="${adminBoardInformation.get('licenseUrl')}">&nbsp</span>
+
+                </p>
+            </nav>
+        </div>
+    </footer>
+</th:block>
