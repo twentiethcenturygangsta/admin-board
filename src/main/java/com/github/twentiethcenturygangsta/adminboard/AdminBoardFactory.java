@@ -131,6 +131,7 @@ public class AdminBoardFactory {
         adminBoardInfoTable.put("license", adminBoardInfo.getLicense());
         adminBoardInfoTable.put("licenseUrl", adminBoardInfo.getLicenseUrl());
         adminBoardInfoTable.put("version", adminBoardInfo.getVersion());
+        adminBoardInfoTable.put("contactUrl", adminBoardInfo.getContactUrl());
         return adminBoardInfoTable;
     }
 
