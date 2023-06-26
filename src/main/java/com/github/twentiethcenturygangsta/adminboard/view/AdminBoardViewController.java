@@ -50,8 +50,9 @@ public class AdminBoardViewController {
     }
 
     @GetMapping("/AdminBoardUser")
-    public String AdminUserView(Model model, @PageableDefault Pageable pageable) {
+    public String AdminUserView(Model model, HttpServletRequest request, @PageableDefault Pageable pageable) {
         getSideBarModel(model);
+        getNavBarModel(model, request);
         model.addAttribute("data", adminBoardServiceFactory.getAdminBoardUsers(pageable));
         model.addAttribute("entity", adminBoardFactory.getEntity("AdminBoardUser"));
         model.addAttribute("groupName", "AdminBoard");
@@ -65,6 +66,7 @@ public class AdminBoardViewController {
         if(adminBoardUser.isPresent()) {
             HttpSession session = request.getSession();
             session.setAttribute(SessionConst.LOGIN_MEMBER, adminBoardUser.get().getUserId());
+
             return "redirect:/admin-board/task";
         } else{
             model.addAttribute("error", "일치하는 대시보드 계정이 존재하지 않습니다.");
@@ -75,11 +77,13 @@ public class AdminBoardViewController {
     @GetMapping("/{entityName}")
     public String EntityView(
             Model model,
+            HttpServletRequest request,
             @PathVariable("entityName") String entityName,
             String keyword,
             String type,
             @PageableDefault Pageable pageable) {
         getSideBarModel(model);
+        getNavBarModel(model, request);
 
         if ("ALL".equals(keyword) && "ALL".equals(type)) {
             model.addAttribute("keyword", "ALL");
@@ -98,9 +102,11 @@ public class AdminBoardViewController {
     @GetMapping("/{entityName}/{id}")
     public String EntityDetailView(
             Model model,
+            HttpServletRequest request,
             @PathVariable("entityName") String entityName,
             @PathVariable("id") Long id) {
         getSideBarModel(model);
+        getNavBarModel(model, request);
         model.addAttribute("entity", adminBoardFactory.getEntity(entityName));
         Object returnObject = null;
         Optional<Object> object = adminBoardFactory.getObject(entityName, id);
@@ -162,16 +168,17 @@ public class AdminBoardViewController {
     public String TaskView( Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         getSideBarModel(model);
+        getNavBarModel(model, request);
         String adminBoardUser = (String) session.getAttribute(SessionConst.LOGIN_MEMBER);
-        model.addAttribute("userName", session.getAttribute(SessionConst.LOGIN_MEMBER));
         model.addAttribute("data", adminBoardFactory.getTasks(adminBoardUser));
         model.addAttribute("entityName", "Task");
         return "tasks";
     }
 
     @GetMapping("/{entityName}/object")
-    public String createObjectView(Model model, @PathVariable("entityName") String entityName) {
+    public String createObjectView(Model model, HttpServletRequest request, @PathVariable("entityName") String entityName) {
         getSideBarModel(model);
+        getNavBarModel(model, request);
         model.addAttribute("entity", adminBoardFactory.getEntity(entityName));
         model.addAttribute("entityName", entityName);
         model.addAttribute("entities", adminBoardFactory.getEntities());
@@ -182,10 +189,12 @@ public class AdminBoardViewController {
     @GetMapping("/{entityName}/object/{id}/edit")
     public String updateObjectView(
             Model model,
+            HttpServletRequest request,
             @PathVariable("entityName") String entityName,
             @PathVariable("id") Long id
     ) {
         getSideBarModel(model);
+        getNavBarModel(model, request);
         model.addAttribute("entity", adminBoardFactory.getEntity(entityName));
         model.addAttribute("entityName", entityName);
         model.addAttribute("entities", adminBoardFactory.getEntities());
@@ -204,5 +213,15 @@ public class AdminBoardViewController {
         model.addAttribute("adminBoardInformation", adminBoardFactory.getAdminBoardInfo());
         model.addAttribute("entitiesByGroup", adminBoardFactory.getGroupEntities());
         model.addAttribute("entities", adminBoardFactory.getEntities());
+    }
+
+    private void getNavBarModel(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String userId = (String) session.getAttribute(SessionConst.LOGIN_MEMBER);
+        model.addAttribute("userName", userId);
+        model.addAttribute("createAuthority", adminBoardServiceFactory.getAdminBoardUser(userId).getHasCreateObjectAuthority());
+        model.addAttribute("createAdminAuthority", adminBoardServiceFactory.getAdminBoardUser(userId).getHasCreateAdminBoardUserAuthority());
+        model.addAttribute("updateAuthority", adminBoardServiceFactory.getAdminBoardUser(userId).getHasUpdateObjectAuthority());
+        model.addAttribute("deleteAuthority", adminBoardServiceFactory.getAdminBoardUser(userId).getHasDeleteObjectAuthority());
     }
 }

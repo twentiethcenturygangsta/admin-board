@@ -27,4 +27,8 @@ public class AdminBoardServiceFactory {
     public Page<AdminBoardUser> getAdminBoardUsers(Pageable pageable) {
         return adminBoardUserRepository.findAll(pageable);
     }
+
+    public AdminBoardUser getAdminBoardUser(String userId) {
+        return adminBoardUserRepository.findByUserId(userId).orElseThrow();
+    }
 }

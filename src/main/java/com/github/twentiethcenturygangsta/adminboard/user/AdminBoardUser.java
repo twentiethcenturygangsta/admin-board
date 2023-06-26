@@ -57,4 +57,18 @@ public class AdminBoardUser {
         this.hasDeleteObjectAuthority = hasDeleteObjectAuthority;
     }
 
+    public Boolean getHasCreateObjectAuthority() {
+        return hasCreateObjectAuthority;
+    }
+    public Boolean getHasCreateAdminBoardUserAuthority() {
+        return hasCreateAdminBoardUserAuthority;
+    }
+
+    public Boolean getHasDeleteObjectAuthority() {
+        return hasDeleteObjectAuthority;
+    }
+
+    public Boolean getHasUpdateObjectAuthority() {
+        return hasUpdateObjectAuthority;
+    }
 }

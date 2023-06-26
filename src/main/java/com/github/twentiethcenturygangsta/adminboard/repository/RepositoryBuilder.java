@@ -22,25 +22,4 @@ public class RepositoryBuilder<T, ID> {
             throw new IllegalArgumentException("Repository object is not an instance of " + repositoryType.getName());
         }
     }
-
-//    @SuppressWarnings("unchecked")
-//    public JpaRepository<T, ID> buildJpaRepository() {
-//        return build(JpaRepository.class);
-//    }
-//
-//    public CrudRepository<T, ID> buildCrudRepository() {
-//        return build(CrudRepository.class);
-//    }
-//
-//    public ListCrudRepository<T, ID> buildListCrudRepository() {
-//        return build(ListCrudRepository.class);
-//    }
-//
-//    public ListPagingAndSortingRepository<T, ID> buildListPagingAndSortingRepository() {
-//        return build(ListPagingAndSortingRepository.class);
-//    }
-//
-//    public PagingAndSortingRepository<T, ID> buildPagingAndSortingRepository() {
-//        return build(PagingAndSortingRepository.class);
-//    }
 }
