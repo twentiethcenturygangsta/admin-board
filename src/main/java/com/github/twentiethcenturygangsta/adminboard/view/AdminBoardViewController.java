@@ -35,20 +35,6 @@ public class AdminBoardViewController {
         this.adminBoardLoginService = adminBoardLoginService;
     }
 
-    @GetMapping("/home")
-    public String HomeView(Model model) {
-        log.info("entities = {}", adminBoardFactory.getEntities());
-        log.info("data = {}", adminBoardFactory.getGroupEntities());
-        return "home";
-    }
-
-    @GetMapping("/user")
-    public String ProfileView(Model model) {
-        getSideBarModel(model);
-        model.addAttribute("data", adminBoardFactory.getEntities());
-        return "user";
-    }
-
     @GetMapping("/AdminBoardUser")
     public String AdminUserView(Model model, HttpServletRequest request, @PageableDefault Pageable pageable) {
         getSideBarModel(model);
@@ -123,44 +109,6 @@ public class AdminBoardViewController {
 
         return "objectDetail";
     }
-
-    @GetMapping("/table")
-    public String TableView(Model model) {
-        getSideBarModel(model);
-        model.addAttribute("data", adminBoardFactory.getEntities());
-        return "table";
-    }
-
-    @GetMapping("/notifications")
-    public String NotificationView(Model model) {
-        model.addAttribute("data", adminBoardFactory.getEntities());
-        return "notifications";
-    }
-
-    @GetMapping("/icons")
-    public String IconsView(Model model) {
-        model.addAttribute("data", adminBoardFactory.getEntities());
-        return "icons";
-    }
-
-    @GetMapping("/maps")
-    public String MapsView(Model model) {
-        model.addAttribute("data", adminBoardFactory.getEntities());
-        return "maps";
-    }
-
-    @GetMapping("/typography")
-    public String TypographyView(Model model) {
-        model.addAttribute("data", adminBoardFactory.getEntities());
-        return "typography";
-    }
-
-    @GetMapping("/upgrade")
-    public String UpgradeView(Model model) {
-        model.addAttribute("data", adminBoardFactory.getEntities());
-        return "upgrade";
-    }
-
 
     @GetMapping("/login")
     public String LoginView(@ModelAttribute("login") LoginRequestDto loginRequestDto) {
