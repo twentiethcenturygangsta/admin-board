@@ -130,6 +130,11 @@ public class AdminBoardViewController {
     public String createObjectView(Model model, HttpServletRequest request, @PathVariable("entityName") String entityName) {
         getSideBarModel(model);
         getNavBarModel(model, request);
+        HttpSession session = request.getSession();
+        Boolean createAuthority = (Boolean) session.getAttribute("createAuthority");
+        if(!createAuthority) {
+            return "redirect:/admin-board/" + entityName;
+        }
         model.addAttribute("entity", adminBoardFactory.getEntity(entityName));
         model.addAttribute("entityName", entityName);
         model.addAttribute("entities", adminBoardFactory.getEntities());
@@ -146,6 +151,11 @@ public class AdminBoardViewController {
     ) {
         getSideBarModel(model);
         getNavBarModel(model, request);
+        HttpSession session = request.getSession();
+        Boolean updateAuthority = (Boolean) session.getAttribute("updateAuthority");
+        if(!updateAuthority) {
+            return "redirect:/admin-board/" + entityName +"/object/" + id;
+        }
         model.addAttribute("entity", adminBoardFactory.getEntity(entityName));
         model.addAttribute("entityName", entityName);
         model.addAttribute("entities", adminBoardFactory.getEntities());
